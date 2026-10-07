@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Chengqi Xue — Robotics and embodied AI" data-zh="薛程琪 — 机器人与具身智能">Chengqi Xue — Robotics and embodied AI</title>
+<meta name="description" content="Chengqi Xue, MSc Robotics at King’s College London. Embodied intelligence, vision–tactile–language–action learning, real-robot deployment.">
+<meta property="og:title" content="Chengqi Xue — Robotics and embodied AI">
+<meta property="og:description" content="Chengqi Xue, MSc Robotics at King’s College London. Embodied intelligence, vision–tactile–language–action learning, real-robot deployment.">
+<meta property="og:image" content="https://chengqi-xue.github.io/assets/img/vtla-setup-overview.jpg">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>(function(){try{var l=localStorage.getItem('lang');if(!l){l=(navigator.language||'').toLowerCase().startsWith('zh')?'zh':'en';}document.documentElement.setAttribute('data-lang',l);document.documentElement.lang=l==='zh'?'zh-CN':'en';}catch(e){}})();</script>
+</head>
+<body class="dark-top home">
+<header class="top">
+<div class="wrap top-in">
+<a class="brand" href="index.html"><span class="brand-zh">薛程琪</span><span class="brand-en">Chengqi Xue</span></a>
+<nav class="nav">
+<a href="index.html#research"><span class="en">Research</span><span class="zh">研究项目</span></a>
+<a href="index.html#publications"><span class="en">Publications</span><span class="zh">论文与专利</span></a>
+<a href="index.html#about"><span class="en">About</span><span class="zh">关于我</span></a>
+<a href="assets/cv/Chengqi_Xue_CV_EN.pdf" class="en" target="_blank" rel="noopener">CV</a><a href="assets/cv/Chengqi_Xue_CV_ZH.pdf" class="zh" target="_blank" rel="noopener">简历</a>
+<button class="lang" type="button" id="langToggle" aria-label="Switch language"><span class="en">中文</span><span class="zh">English</span></button>
+</nav>
+<button class="menu-btn" type="button" id="menuBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+</div>
+</header>
+<section class="hero" id="top">
+<canvas id="gel" aria-hidden="true"></canvas>
+<div class="wrap">
+<h1 class="hero-name"><span class="zh">薛程琪</span><span class="en">Chengqi<br>Xue</span><small><span class="en">薛程琪 · MSc Robotics, King’s College London</span><span class="zh">Chengqi Xue · 伦敦国王学院 机器人工程硕士</span></small></h1>
+<p class="hero-role en">I build robots that see, touch and reason—and I take them from algorithm to real hardware.</p>
+<p class="hero-role zh">让机器人会看、会摸、会推理，并把算法真正落到真机上。</p>
+<ul class="hero-tags">
+<li><span class="en">Embodied intelligence</span><span class="zh">具身智能</span></li><li><span class="en">Vision–language–action models</span><span class="zh">视觉-语言-动作模型</span></li><li><span class="en">Tactile sensing</span><span class="zh">触觉感知</span></li><li><span class="en">Robot manipulation</span><span class="zh">机器人操作</span></li>
+</ul>
+<div class="hero-cta"><a class="btn" href="#research"><span class="en">See the research</span><span class="zh">查看研究项目</span></a><a class="btn ghost" href="#about"><span class="en">About me</span><span class="zh">关于我</span></a></div>
+</div>
+<div class="hero-hint"><span class="en">The dots are a tactile marker field—move the pointer to press it.</span><span class="zh">背景是触觉传感器的标记点阵，移动鼠标即可“按压”。</span></div>
+</section>
+<section class="sec" id="thesis"><div class="wrap"><div class="thesis">
+<div>
+<h2><span class="en">From a tactile image to a confident grasp, every step should be measurable.</span><span class="zh">从一张触觉图像到一次可靠的抓取，每一步都应当可测量。</span></h2>
+<p class="en">My work sits where perception meets action. I pair vision-based tactile sensors with large multimodal models so a robot can judge what it cannot see, and I care as much about the evaluation protocol, the calibration ledger and the deployment path as about the headline number.</p><p class="zh">我的工作处在感知与动作的交界处：把视觉触觉传感器与多模态大模型结合，让机器人判断那些看不见的属性；同时我同样在意评测协议、标定记录和部署路径，而不只是一个好看的指标。</p>
+</div>
+<div class="facts">
+<div><div class="fact-v">4</div><div class="fact-l"><span class="en">SCI Q1 journal papers (3 as co-first author)</span><span class="zh">SCI Q1 期刊论文（3 篇共同一作）</span></div></div>
+<div><div class="fact-v">4</div><div class="fact-l"><span class="en">patents (2 as first inventor)</span><span class="zh">项专利（2 项第一发明人）</span></div></div>
+<div><div class="fact-v">2</div><div class="fact-l"><span class="en">real-robot VLA deployments on Franka arms</span><span class="zh">次 Franka 机械臂真机 VLA 部署</span></div></div>
+<div><div class="fact-v">0.33 N</div><div class="fact-l"><span class="en">force-estimation error from a tactile image alone, on unseen fabrics</span><span class="zh">仅凭触觉图像估计接触力的误差（未见织物）</span></div></div>
+</div>
+</div></div></section><section class="sec alt" id="research"><div class="wrap"><div class="sec-head"><h2><span class="en">Research</span><span class="zh">研究项目</span></h2><p class="en lead">Seven projects, grouped by where they happened. Each page tells the whole story: the problem, the hardware, the method, the numbers, and what I built with my own hands.</p><p class="zh lead">七个项目，按发生的地点分组。每个项目页面都讲完整的故事：问题、硬件、方法、数据，以及我亲手做的部分。</p></div><div class="group"><div class="group-h"><h3><span class="en">Embodied intelligence and robot learning</span><span class="zh">具身智能与机器人学习</span></h3><span><span class="en">King’s College London, 2025–2026</span><span class="zh">伦敦国王学院，2025–2026</span></span></div><article class="feat">
+<a class="feat-media" href="projects/vtla.html" aria-hidden="true" tabindex="-1"><video autoplay muted loop playsinline preload="metadata" poster="assets/video/vtla-demo.jpg"><source src="assets/video/vtla-demo.mp4" type="video/mp4"></video></a>
+<div>
+<div class="feat-kind"><span class="en">MSc dissertation · King’s College London · Franka + GelSight</span><span class="zh">硕士毕业课题 · 伦敦国王学院 · Franka + GelSight</span></div>
+<h3><a href="projects/vtla.html"><span class="en">Vision–Tactile–Language–Action learning for robotic fabric sorting</span><span class="zh">视觉-触觉-语言-动作（VTLA）学习用于机器人织物分拣</span></a></h3>
+<p class="feat-q en">Can a robot that cannot see the difference between two garments feel it, explain it, and act on it?</p><p class="feat-q zh">两件看起来几乎一样的衣物，机器人能否靠“摸”分辨出来，再用语言说清楚，并据此完成分拣？</p>
+<p class="en">An end-to-end system on a Franka arm: a GelSight fingertip presses hanging garments, a ResNet-18 load estimator replaces the force sensor at run time (MAE 0.33 N on unseen fabrics), a QLoRA-tuned Qwen2.5-VL compares softness, thickness, elasticity and texture, and the arm ranks four garments, picks one and places it in a basket. π0.5 served as the VLA backbone explored for the action policy.</p><p class="zh">在 Franka 机械臂上搭建的端到端系统：GelSight 指尖按压悬挂衣物，ResNet-18 力估计器在部署阶段取代力传感器（未见织物 MAE 0.33 N），QLoRA 微调的 Qwen2.5-VL 比较柔软度、厚度、弹性与纹理，机械臂对四件衣物排序、挑选并放入篮筐。动作策略以 π0.5 作为 VLA 骨干进行探索。</p>
+<div class="feat-stack">Franka Emika · GelSight Mini · Qwen2.5-VL-7B · QLoRA · π0.5 · PyTorch · ROS</div>
+<a class="more" href="projects/vtla.html"><span class="en">Read the project</span><span class="zh">查看项目详情</span></a>
+</div>
+</article><article class="feat flip">
+<a class="feat-media" href="projects/tactile-umi.html" aria-hidden="true" tabindex="-1"><video autoplay muted loop playsinline preload="metadata" poster="assets/video/umi-pi05-demo.jpg"><source src="assets/video/umi-pi05-demo.mp4" type="video/mp4"></video></a>
+<div>
+<div class="feat-kind"><span class="en">Research system · joint work at KCL · π0.5 branch</span><span class="zh">研究系统 · KCL 合作项目 · π0.5 分支</span></div>
+<h3><a href="projects/tactile-umi.html"><span class="en">Tactile UMI: from hand-held visuotactile demonstrations to a π0.5 policy on a Franka FR3</span><span class="zh">Tactile UMI：从手持视触觉示教到 Franka FR3 上的 π0.5 策略</span></a></h3>
+<p class="feat-q en">How do hand-held demonstrations with touch become calibrated, auditable data a VLA policy can actually learn from?</p><p class="feat-q zh">带触觉的手持示教，如何变成标定可靠、可审计、能真正训练 VLA 策略的数据？</p>
+<p class="en">With a lab mate I built a UMI-style hand-held gripper with wrist RGB, dual GelSight fingertips, Quest motion tracking and gripper state; calibrated geometry and clocks (hand–eye, 56.7 ms Quest–camera offset, gripper-width lookup) and audited every episode. He trained a Diffusion Policy on the corpus; I fine-tuned π0.5 on the same demonstrations and ran it on the FR3.</p><p class="zh">我和实验室同学一起搭建了带手腕相机、双 GelSight 指尖、Quest 运动追踪与夹爪状态的 UMI 式手持夹爪；完成几何与时钟标定（手眼标定、56.7 ms Quest–相机时延、夹爪开度查表），并对每条示教做审计。他用这批数据训练 Diffusion Policy，我则在同一批示教上微调 π0.5，并在 FR3 上实机运行。</p>
+<div class="feat-stack">UMI gripper · GelSight · Meta Quest · ArUco · π0.5 (openpi) · Franka FR3 · Zarr/H5</div>
+<a class="more" href="projects/tactile-umi.html"><span class="en">Read the project</span><span class="zh">查看项目详情</span></a>
+</div>
+</article><article class="feat">
+<a class="feat-media" href="projects/tiago.html" aria-hidden="true" tabindex="-1"><video autoplay muted loop playsinline preload="metadata" poster="assets/video/tiago-demo.jpg"><source src="assets/video/tiago-demo.mp4" type="video/mp4"></video></a>
+<div>
+<div class="feat-kind"><span class="en">Group project · KCL × Guy’s and St Thomas’ · ROS 2</span><span class="zh">小组项目 · KCL × Guy’s and St Thomas’ 医院 · ROS 2</span></div>
+<h3><a href="projects/tiago.html"><span class="en">TIAGo assistive robot for chemotherapy wards</span><span class="zh">医院辅助患者的 TIAGo 自主服务机器人</span></a></h3>
+<p class="feat-q en">Can a ward robot notice a patient who needs help, reach them safely, and stay out of the way of clinical staff?</p><p class="feat-q zh">病房里的机器人能否察觉需要帮助的患者、安全地走到他们身边，又不打扰医护工作？</p>
+<p class="en">A ROS 2 + Webots system for the TIAGo platform: speech trigger (Faster-Whisper) followed by MediaPipe wave detection, RGB-D target localisation, and a full SLAM → AMCL → Nav2 pipeline that stops at a social stand-off distance. 92% end-to-end success and 94% navigation success over simulated ward trials.</p><p class="zh">基于 TIAGo 平台的 ROS 2 + Webots 系统：语音触发（Faster-Whisper）后由 MediaPipe 检测挥手，RGB-D 定位患者，再经 SLAM → AMCL → Nav2 完整导航流水线，在社交安全距离处停下。病房仿真试验端到端成功率 92%，导航成功率 94%。</p>
+<div class="feat-stack">ROS 2 Humble · Webots · Nav2 · SLAM Toolbox · AMCL · MediaPipe · Faster-Whisper · Docker</div>
+<a class="more" href="projects/tiago.html"><span class="en">Read the project</span><span class="zh">查看项目详情</span></a>
+</div>
+</article></div><div class="group"><div class="group-h"><h3><span class="en">Industrial vision and data-driven engineering</span><span class="zh">工业视觉与数据驱动工程</span></h3><span><span class="en">Yangtze University, 2021–2025</span><span class="zh">长江大学，2021–2025</span></span></div><article class="feat flip">
+<a class="feat-media" href="projects/thread-inspection.html" aria-hidden="true" tabindex="-1"><img src="assets/img/p4_robot_arm_rig_photo.png" alt="" loading="lazy"></a>
+<div>
+<div class="feat-kind"><span class="en">Research assistant · Yangtze University · 2 SCI Q1 + 2 SPIE papers + 2 patents</span><span class="zh">科研助理 · 长江大学 · 2 篇 SCI Q1 + 2 篇 SPIE + 2 项专利</span></div>
+<h3><a href="projects/thread-inspection.html"><span class="en">Multi-vision and deep-learning inspection of internal threads</span><span class="zh">基于多视觉与深度学习的内螺纹缺陷检测系统</span></a></h3>
+<p class="feat-q en">How do you inspect a thread that lives inside a dark, curved, 100 mm bore, when defect samples are too rare to train on?</p><p class="feat-q zh">螺纹藏在黑暗、弯曲的 100 mm 孔内，缺陷样本又极其稀少，如何做到自动检测？</p>
+<p class="en">A six-fisheye ring probe with strip lighting, cylindrical-model panorama stitching where planar methods fail, DFMGAN few-shot defect synthesis, and YOLOv8 detection (mAP 91.6%). A robot-arm carrier cut acquisition time by 44%.</p><p class="zh">六目鱼眼环形探头配条形光源；在平面拼接全部失效的曲面场景下提出柱面投影全景拼接；用 DFMGAN 少样本生成缺陷图像；YOLOv8 检测 mAP 91.6%。机械臂采集方案比步进电机方案提速 44%。</p>
+<div class="feat-stack">Raspberry Pi · fisheye cameras · OpenCV · SIFT/RANSAC · StyleGAN2/DFMGAN · YOLOv8</div>
+<a class="more" href="projects/thread-inspection.html"><span class="en">Read the project</span><span class="zh">查看项目详情</span></a>
+</div>
+</article><article class="feat">
+<a class="feat-media" href="projects/gfrp-ml.html" aria-hidden="true" tabindex="-1"><img src="assets/img/p5_meta_gfrp_columns_photo.jpg" alt="" loading="lazy"></a>
+<div>
+<div class="feat-kind"><span class="en">Research assistant · Yangtze University · 2 SCI Q1 papers</span><span class="zh">科研助理 · 长江大学 · 2 篇 SCI Q1 论文</span></div>
+<h3><a href="projects/gfrp-ml.html"><span class="en">Small-sample machine learning for engineering-structure modelling and optimisation</span><span class="zh">小样本机器学习驱动的工程结构性能建模与优化</span></a></h3>
+<p class="feat-q en">With only 72 destructive tests, can a model predict how a composite column will fail—and tell you how to design a better one?</p><p class="feat-q zh">只有 72 组破坏性试验数据，模型能否预测复合材料柱的承载性能，并反过来指导设计？</p>
+<p class="en">Genetic-algorithm data augmentation (72 → 15,000 virtual samples), a Reptile meta-learning regressor reaching R² 0.982 for ultimate bearing capacity and 0.955 for displacement, and a TPOT AutoML benchmark that yields concrete optimal section designs.</p><p class="zh">遗传式数据增广（72 → 15,000 组虚拟样本）；基于 Reptile 的元学习回归模型，极限承载力 R² 0.982、极限位移 R² 0.955；TPOT AutoML 对比实验并反演出最优截面设计方案。</p>
+<div class="feat-stack">Python · scikit-learn · PyTorch · Reptile/MAML · TPOT AutoML · SVR/GPR/RBFNN</div>
+<a class="more" href="projects/gfrp-ml.html"><span class="en">Read the project</span><span class="zh">查看项目详情</span></a>
+</div>
+</article><article class="feat flip">
+<a class="feat-media contain" href="projects/industrial-monitoring.html" aria-hidden="true" tabindex="-1"><img src="assets/img/p6_patent_wellhead_fig1_overall_tripod_camera.png" alt="" loading="lazy"></a>
+<div>
+<div class="feat-kind"><span class="en">Research assistant · Yangtze University · 2 utility patents, first inventor</span><span class="zh">科研助理 · 长江大学 · 2 项实用新型专利（第一发明人）</span></div>
+<h3><a href="projects/industrial-monitoring.html"><span class="en">Machine-vision monitoring and early warning for hazardous well sites</span><span class="zh">基于机器视觉的工业监测预警系统</span></a></h3>
+<p class="feat-q en">On an open well site full of flammable gas, how do you catch a missing hard hat—and tell workers which way to run?</p><p class="feat-q zh">在易燃易爆气体环境的井场上，如何自动发现没戴安全帽的工人，并在泄漏时告诉大家往哪跑？</p>
+<p class="en">A three-axis (rotate / extend / pitch) camera gantry that sweeps the wellhead and flags missing hard hats and smoking on an embedded box, plus a solar-powered beacon that couples an H₂S detector with a wind vane so an LED arrow always points to the up-wind escape route.</p><p class="zh">旋转/伸缩/俯仰三自由度视觉巡检机构，在嵌入式控制盒上识别未戴安全帽与吸烟行为；以及光伏供电的预警装置，把硫化氢检测与风向标联动，LED 箭头始终指向逆风逃生方向。</p>
+<div class="feat-stack">Embedded vision · stepper/servo mechanisms · MCU · H₂S sensing · solar power · patent drafting</div>
+<a class="more" href="projects/industrial-monitoring.html"><span class="en">Read the project</span><span class="zh">查看项目详情</span></a>
+</div>
+</article></div><div class="group"><div class="group-h"><h3><span class="en">Internship</span><span class="zh">实习经历</span></h3><span><span class="en">Snap Inc., 2026</span><span class="zh">Snap Inc.，2026</span></span></div><article class="feat">
+<a class="feat-media" href="projects/hri30.html" aria-hidden="true" tabindex="-1"><img src="assets/img/hri30-dataset.jpg" alt="" loading="lazy"></a>
+<div>
+<div class="feat-kind"><span class="en">Internship · Snap Inc. Spectacles AR · ML engineering (CV) · London, 2026</span><span class="zh">实习 · Snap Inc. Spectacles AR · 机器学习工程（CV 方向）· 伦敦 · 2026</span></div>
+<h3><a href="projects/hri30.html"><span class="en">Dual-stream action recognition for industrial human–robot collaboration (HRI30)</span><span class="zh">面向工业人机协作的双流动作识别（HRI30）</span></a></h3>
+<p class="feat-q en">Can RGB appearance and skeleton motion be fused so a robot reads what a worker is doing?</p><p class="feat-q zh">把 RGB 外观与骨架运动融合，机器人能否读懂工人正在做什么？</p>
+<p class="en">Two branches on the HRI30 dataset (30 industrial actions): a Kinetics-pretrained 3D ResNet-18 on 16-frame clips and a six-block ST-GCN on YOLOv8-Pose skeletons, fused by weighted late fusion. Built end to end—preprocessing, training, batched inference and submission tooling.</p><p class="zh">在 HRI30 数据集（30 类工业动作）上搭建双分支：Kinetics 预训练的 3D ResNet-18 处理 16 帧片段，六层 ST-GCN 处理 YOLOv8-Pose 骨架序列，加权后期融合。从预处理、训练到批量推理与结果导出全链路独立完成。</p>
+<div class="feat-stack">PyTorch · torchvision r3d_18 · YOLOv8-Pose · ST-GCN · OpenCV · late fusion</div>
+<a class="more" href="projects/hri30.html"><span class="en">Read the project</span><span class="zh">查看项目详情</span></a>
+</div>
+</article></div></div></section><section class="sec" id="publications"><div class="wrap"><div class="sec-head"><h2><span class="en">Publications and patents</span><span class="zh">论文与专利</span></h2><p class="en lead">Four SCI Q1 journal papers, two SPIE conference papers, and four patents from the undergraduate research years.</p><p class="zh lead">本科科研阶段发表 4 篇 SCI Q1 期刊论文、2 篇 SPIE 国际会议论文，获得 4 项专利。</p></div><ul class="pubs"><li class="pub"><div class="pub-venue">PLOS ONE<br>2024</div><div><div class="pub-t"><span class="en">Data modeling analysis of GFRP tubular filled concrete column based on small sample deep meta learning method</span><span class="zh">基于小样本深度元学习方法的 GFRP 管混凝土柱数据建模分析</span></div><div class="pub-a">T. Deng, <b>C. Xue</b> (co-first author), G. Zhang</div><div class="pub-l"><a href="https://doi.org/10.1371/journal.pone.0305038" target="_blank" rel="noopener">doi.org/10.1371/journal.pone.0305038</a> · <a href="projects/gfrp-ml.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div></li><li class="pub"><div class="pub-venue">PLOS ONE<br>2024</div><div><div class="pub-t"><span class="en">Internal thread defect detection system based on multi-vision</span><span class="zh">基于多视觉的内螺纹缺陷检测系统</span></div><div class="pub-a">X. Dou, <b>C. Xue</b> (co-first author), G. Zhang, Z. Jiang</div><div class="pub-l"><a href="https://doi.org/10.1371/journal.pone.0304224" target="_blank" rel="noopener">doi.org/10.1371/journal.pone.0304224</a> · <a href="projects/thread-inspection.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div></li><li class="pub"><div class="pub-venue">PLOS ONE<br>2024</div><div><div class="pub-t"><span class="en">Study on design optimization of GFRP tubular column composite structure based on machine learning method</span><span class="zh">基于机器学习方法的 GFRP 管柱复合结构设计优化研究</span></div><div class="pub-a">P. Shu, <b>C. Xue</b> (co-first author), G. Zhang, T. Deng</div><div class="pub-l"><a href="https://doi.org/10.1371/journal.pone.0301865" target="_blank" rel="noopener">doi.org/10.1371/journal.pone.0301865</a> · <a href="projects/gfrp-ml.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div></li><li class="pub"><div class="pub-venue">Sensors<br>2024</div><div><div class="pub-t"><span class="en">Internal thread defect generation algorithm and detection system based on generative adversarial networks and You Only Look Once</span><span class="zh">基于生成对抗网络与 YOLO 的内螺纹缺陷生成算法与检测系统</span></div><div class="pub-a">Z. Jiang, X. Dou, X. Liu, <b>C. Xue</b>, A. Wang, G. Zhang · Sensors 24(17), 5636</div><div class="pub-l"><a href="https://doi.org/10.3390/s24175636" target="_blank" rel="noopener">doi.org/10.3390/s24175636</a> · <a href="projects/thread-inspection.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div></li><li class="pub"><div class="pub-venue">Proc. SPIE (AASIP 2024)<br>2024</div><div><div class="pub-t"><span class="en">Review of image calibration and distortion correction based on internal threads</span><span class="zh">面向内螺纹的图像标定与畸变校正综述</span></div><div class="pub-a">H. Yuan, X. Dou, <b>C. Xue</b> (corresponding author), et al.</div><div class="pub-l"><a href="https://doi.org/10.1117/12.3045519" target="_blank" rel="noopener">doi.org/10.1117/12.3045519</a> · <a href="projects/thread-inspection.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div></li><li class="pub"><div class="pub-venue">Proc. SPIE (RSTIP 2024)<br>2024</div><div><div class="pub-t"><span class="en">A review of image stitching algorithms based on internal thread</span><span class="zh">面向内螺纹的图像拼接算法综述</span></div><div class="pub-a">Z. Xu, <b>C. Xue</b> (corresponding author), X. Dou, et al.</div><div class="pub-l"><a href="https://doi.org/10.1117/12.3065383" target="_blank" rel="noopener">doi.org/10.1117/12.3065383</a> · <a href="projects/thread-inspection.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div></li><li class="pub"><div class="pub-venue">PLOS ONE · under review<br>2026</div><div><div class="pub-t"><span class="en">Modeling analysis of toughened sandwich glass based on machine learning methods</span><span class="zh">基于机器学习方法的钢化夹层玻璃建模分析</span></div><div class="pub-a"><b>C. Xue</b>, X. Zhao, H. Yuan, Y. Zhang</div><div class="pub-l"><span class="en">Under review</span><span class="zh">审稿中</span></div></div></li></ul><h3><span class="en">Patents</span><span class="zh">专利</span></h3><div class="patents"><div class="patent"><span class="role"><span class="en">First inventor</span><span class="zh">第一发明人</span></span><div><span class="en">Wellhead working-face monitoring device based on machine vision</span><span class="zh">基于机器视觉的井口工作面监控装置</span></div><div class="no">ZL 202323487863.X · granted 2024</div><div class="no"><a href="projects/industrial-monitoring.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div><div class="patent"><span class="role"><span class="en">First inventor</span><span class="zh">第一发明人</span></span><div><span class="en">Well-site wind-direction early-warning system</span><span class="zh">风向预警系统</span></div><div class="no">ZL 2023 2 3530543.8 · granted 2024</div><div class="no"><a href="projects/industrial-monitoring.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div><div class="patent"><span class="role"><span class="en">Third inventor</span><span class="zh">第三发明人</span></span><div><span class="en">External-thread inspection device for tubular tools</span><span class="zh">管具外螺纹检测装置</span></div><div class="no">CN 202411050637.1 · 2024</div><div class="no"><a href="projects/thread-inspection.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div><div class="patent"><span class="role"><span class="en">Third inventor</span><span class="zh">第三发明人</span></span><div><span class="en">Internal thread defect detection system</span><span class="zh">内螺纹缺陷检测系统</span></div><div class="no">CN 202411066290.X · 2024</div><div class="no"><a href="projects/thread-inspection.html"><span class="en">Project page</span><span class="zh">项目页面</span></a></div></div></div></div></section><section class="sec alt" id="about"><div class="wrap"><div class="sec-head"><h2><span class="en">About</span><span class="zh">关于我</span></h2></div><div class="about"><div>
+<p class="en">I am Chengqi Xue, an MSc Robotics student at King’s College London (2025–2026). My undergraduate degree is in Automation from Yangtze University, where I graduated in the top 7% with a National Scholarship. My research is in embodied intelligence and multimodal robot learning: how vision, touch and language can be combined so that a robot acts well in contact-rich tasks.</p><p class="zh">我叫薛程琪，伦敦国王学院机器人工程硕士（2025–2026），本科就读于长江大学自动化专业，专业排名前 7%，获国家奖学金。研究方向是具身智能与多模态机器人学习：如何把视觉、触觉和语言结合起来，让机器人在富接触任务中做出可靠的动作。</p>
+<p class="en">I have the full path from algorithm to real hardware: on a Franka arm I built an end-to-end vision–tactile–language–action system with π0.5 as the VLA backbone, Qwen2.5-VL for reasoning and GelSight for touch, and finished with a real-robot demonstration. Before that, four years as a research assistant taught me to turn industrial problems—unlit thread bores, 72-sample datasets, hazardous well sites—into published, patented systems.</p><p class="zh">我有从算法到真机落地的完整经验：在 Franka 机械臂上以 π0.5 作为 VLA 骨干，结合 Qwen2.5-VL 和 GelSight 触觉感知，搭建了端到端的视觉-触觉-语言-动作系统，并完成真机演示。此前四年科研助理经历，让我习惯把工业现场的问题——无光的螺纹孔、只有 72 组数据的试验、危险的井场——变成发表的论文、授权的专利和能运行的系统。</p>
+<p class="en">How I work: break the problem apart first, then let data settle the argument. I can drive a project on my own and I like working across teams; English is a working language for me. What I want next is to put embodied-intelligence algorithms into real product settings.</p><p class="zh">做事习惯先把问题拆清楚，再用数据验证结论；能独立推进项目，也愿意和不同团队协作；英语可以作为工作语言。接下来希望能在真实的产品场景里把具身智能算法落地。</p>
+<div class="links"><a class="btn" href="mailto:k25075983@kcl.ac.uk"><span class="en">Email me</span><span class="zh">给我发邮件</span></a><a class="btn ghost" href="assets/cv/Chengqi_Xue_CV_EN.pdf" target="_blank" rel="noopener"><span class="en">CV (English)</span><span class="zh">英文简历</span></a><a class="btn ghost" href="assets/cv/Chengqi_Xue_CV_ZH.pdf" target="_blank" rel="noopener"><span class="en">CV (Chinese)</span><span class="zh">中文简历</span></a></div>
+</div><div>
+<figure class="portrait fig mt0"><img src="assets/img/portrait.jpg" alt="Chengqi Xue at the Franka workstation in the KCL robotics lab"><figcaption><span class="en">At the Franka workstation, KCL robotics lab, 2026.</span><span class="zh">2026 年，KCL 机器人实验室 Franka 工位。</span></figcaption></figure>
+<h3><span class="en">Education</span><span class="zh">教育背景</span></h3>
+<ul class="timeline">
+<li><span class="when">2025.09 – 2026.09</span><div class="what"><span class="en">MSc Robotics, King’s College London</span><span class="zh">伦敦国王学院 · 机器人工程硕士（MSc Robotics）</span></div><div class="small"><span class="en">Robot dynamics and control, kinematics and motion planning, sensing and perception, machine learning, intelligence and autonomy. Supervised by Prof. Shan Luo.</span><span class="zh">机器人动力学与控制、运动学与运动规划、感知与传感、机器学习、智能与自主系统。导师：罗山教授。</span></div></li>
+<li><span class="when">2020.09 – 2024.06</span><div class="what"><span class="en">BEng Automation, Yangtze University</span><span class="zh">长江大学 · 自动化 · 工学学士</span></div><div class="small"><span class="en">GPA 3.71, top 7%, National Scholarship (top 4%). Automatic control, motion control systems, machine vision, computer control, electronics, C programming.</span><span class="zh">GPA 3.71，专业前 7%，国家奖学金（前 4%）。自动控制原理、运动控制系统、机器视觉、计算机控制技术、模拟/数字电子技术、C 语言程序设计。</span></div></li>
+</ul>
+<h3><span class="en">Skills</span><span class="zh">专业技能</span></h3>
+<ul>
+<li><span class="en">Robotics: ROS 2, SLAM, Navigation2, motion planning; Webots, Gazebo, RViz; GelSight tactile sensing; Franka and TIAGo platforms</span><span class="zh">机器人：ROS 2、SLAM、Navigation2、运动规划；Webots、Gazebo、RViz；GelSight 触觉感知；Franka、TIAGo 平台</span></li>
+<li><span class="en">Learning and vision: PyTorch, OpenCV, YOLO, GANs, VLA and multimodal models (π0.5, Qwen2.5-VL), QLoRA fine-tuning, camera calibration and stitching</span><span class="zh">学习与视觉：PyTorch、OpenCV、YOLO、GAN、VLA 与多模态模型（π0.5、Qwen2.5-VL）、QLoRA 微调、相机标定与图像拼接</span></li>
+<li><span class="en">Tools: Python, MATLAB, C, Linux, Docker, Git</span><span class="zh">工具：Python、MATLAB、C、Linux、Docker、Git</span></li>
+</ul>
+</div></div><hr>
+<h3><span class="en">Honours and awards</span><span class="zh">荣誉奖项</span></h3>
+<ul class="awards">
+<li><span class="when">2024.09</span><span class="en">Best Researcher Award, International Research Awards on Sensing Technology</span><span class="zh">最佳研究员奖（Best Researcher Award），国际传感技术研究奖</span></li>
+<li><span class="when">2023.12</span><span class="en">National Scholarship (top 4%), Yangtze University</span><span class="zh">国家奖学金（前 4%），长江大学</span></li>
+<li><span class="when">2023.10</span><span class="en">Third Prize (provincial), National Undergraduate Electronic Design Contest</span><span class="zh">全国大学生电子设计竞赛省级三等奖</span></li>
+<li><span class="when">2023.09</span><span class="en">First Prize (national), College Students AI Technology Competition</span><span class="zh">全国大学生 AI 科技竞赛一等奖</span></li>
+<li><span class="when">2022.07</span><span class="en">Second Prize, College Students “Internet+” Innovation and Entrepreneurship Competition</span><span class="zh">大学生“互联网+”创新创业大赛二等奖</span></li>
+</ul>
+<div class="photos">
+<figure><img src="assets/img/event-uk-ai-agent.jpg" alt="UK AI Agent Hackathon team photo" loading="lazy" data-zoom><figcaption><span class="en">UK AI Agent Hackathon, London, 2026.</span><span class="zh">UK AI Agent Hackathon（英国 AI 智能体黑客松），伦敦，2026。</span></figcaption></figure>
+<figure><img src="assets/img/event-ai-ningbo.jpg" alt="AI Ningbo Challenge Europe promotion event" loading="lazy" data-zoom><figcaption><span class="en">The 2nd “AI Ningbo” Challenge: Empowering Industries with AI, European-region launch, 2026.</span><span class="zh">第二届“AI 宁波”人工智能赋能产业大赛（欧洲赛区）推介会，2026。</span></figcaption></figure>
+<figure><img src="assets/img/tiago-poster-day.jpg" alt="Poster day with the TIAGo team" loading="lazy" data-zoom><figcaption><span class="en">Poster day with the TIAGo group project team, KCL, 2026.</span><span class="zh">KCL TIAGo 小组项目海报日合影，2026。</span></figcaption></figure>
+</div>
+</div></section><footer class="foot">
+<div class="wrap foot-in">
+<div>
+<div class="foot-name">薛程琪 · Chengqi Xue</div>
+<p class="en">MSc Robotics, King’s College London. Embodied intelligence and multimodal robot learning.</p><p class="zh">伦敦国王学院机器人工程硕士，研究方向：具身智能与多模态机器人学习。</p>
+</div>
+<div class="foot-links">
+<a href="mailto:k25075983@kcl.ac.uk">k25075983@kcl.ac.uk</a>
+<a href="https://github.com/Chengqi-Xue" target="_blank" rel="noopener">GitHub</a>
+<a href="https://scholar.google.com/scholar?q=Chengqi+Xue+PLOS+ONE" target="_blank" rel="noopener">Google Scholar</a>
+<a href="index.html#top"><span class="en">Back to top</span><span class="zh">回到顶部</span></a>
+</div>
+</div>
+<div class="wrap foot-copy">© 2026 Chengqi Xue</div>
+</footer>
+<div class="lightbox" id="lightbox" hidden><button class="lb-close" aria-label="Close">×</button><img alt=""></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
