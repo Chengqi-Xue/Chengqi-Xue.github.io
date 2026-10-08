@@ -59,14 +59,14 @@ def vtla():
     s += section("why", "Why touch, and why this task", "为什么是触觉，为什么是这个任务", prose(
         ("Fabric is one of the most common materials a robot will ever handle and one of the hardest to perceive. Garment sorting for recycling, laundry automation and assistive dressing all require judgements—which of these two is softer, thicker, more elastic, rougher?—that colour images often cannot support: two fabrics that photograph almost identically can differ strongly in weave, pile and compliance. Touch is exactly the modality that exposes those properties.",
          "织物是机器人最常接触、也最难感知的材料之一。衣物回收分拣、洗衣自动化、辅助穿衣都需要回答“这两件哪件更软、更厚、更有弹性、更粗糙”——而这些判断单靠彩色图像往往无法完成：两块拍起来几乎一样的布，在织法、绒面和顺应性上可能差别很大。触觉正是能暴露这些属性的模态。"),
-        ("MLLM-Fabric, a recently published framework, pairs a GelSight sensor with a multimodal large language model so a robot can press two fabrics and state which one is softer, thicker, more elastic or more textured. Its public release contains the data but not the training code, weights or answer-extraction procedure—so any lab wishing to build on it must first rebuild it. That is where this project started.",
-         "最近发表的 MLLM-Fabric 框架把 GelSight 传感器与多模态大语言模型结合起来，让机器人按压两块织物后说出哪块更软、更厚、更有弹性或更有纹理。它公开了数据，却没有公开训练代码、模型权重和答案抽取方法——任何想在其上继续研究的实验室都得先把它重建出来。这个项目就从这里开始。"),
-        ("I asked three questions. Can the published system be reproduced from its released artifacts alone? What does its evaluation protocol actually measure? And can the system be deployed on a real arm when there is no force sensor in the loop? Along the way I built the whole pipeline on a Franka arm and finished with a live demonstration.",
-         "我提出了三个问题：仅凭公开的数据能否独立复现？它的评测协议到底在衡量什么？当回路中没有力传感器时，系统能否部署到真实机械臂上？在回答这些问题的过程中，我在 Franka 机械臂上搭建了完整流水线，并以真机演示收尾。")))
+        ("The idea of pairing a GelSight sensor with a multimodal large language model comes from MLLM-Fabric, which showed that a vision–language model can compare two fabrics along softness, thickness, elasticity and texture. I took that idea as the starting point and built a complete system around it on a Franka arm: my own tactile force dataset, my own training and evaluation pipeline for the language model, a custom end-effector, and a deployment chain that runs with no force sensor in the loop.",
+         "把 GelSight 传感器与多模态大语言模型结合的思路参考了 MLLM-Fabric 这篇论文：它证明了视觉-语言模型可以在柔软度、厚度、弹性和纹理四个维度上比较两块织物。我以此为起点，在 Franka 机械臂上围绕它搭建了一整套系统：自采的触觉力数据集、自建的语言模型训练与评测流水线、自制末端执行器，以及一条回路中不需要力传感器的部署链路。"),
+        ("Three goals drove the work: teach a 7B vision–language model to judge fabric properties from tactile images; measure that ability honestly, on fabrics the model has never touched; and get the whole loop—press, estimate force, reason, rank, grasp, place—running on the real robot.",
+         "三个目标贯穿整个工作：让一个 7B 的视觉-语言模型学会从触觉图像判断织物属性；在模型从未摸过的织物上诚实地衡量这种能力；并让“按压-估力-推理-排序-抓取-放置”的完整闭环在真机上跑起来。")))
 
     # System
-    body = diagram_fig("vtla", "System architecture. Two strictly separated data pipelines—my self-collected force data (A) and the released fabric comparison data (B)—meet for the first time inside the robot, where the force estimator supplies the numbers the language model expects.",
-                       "系统架构。两条严格隔离的数据流水线——我自采的力数据（A）与公开的织物比较数据（B）——第一次汇合是在机器人上：力估计器提供语言模型所需要的力数值。")
+    body = diagram_fig("vtla", "System architecture. Two strictly separated data pipelines—the self-collected force data (A) and the fabric-comparison data (B)—meet for the first time inside the robot, where the force estimator supplies the force values the language model expects.",
+                       "系统架构。两条严格隔离的数据流水线——自采的力数据（A）与织物比较数据（B）——第一次汇合是在机器人上：力估计器提供语言模型所需要的力数值。")
     body += two_col(
         figure(IMG + "vtla-setup-overview.jpg", "The platform: four deliberately similar-looking garments on hangers, the Franka arm with the custom end-effector, and the collection basket. Visual similarity is a design choice—the comparison has to be carried by touch, not colour.",
                "实验平台：四件刻意挑选的外观相近的衣物挂在衣架上，Franka 机械臂装着自制末端执行器，前方是收集篮。外观相似是有意为之——比较必须靠触觉完成，而不是靠颜色。"),
@@ -83,10 +83,10 @@ def vtla():
     s += section("system", "The system on the robot", "机器人上的系统", body, cls="alt")
 
     # Force estimator
-    body = prose(("The data-collection rig in the original work assumed a calibrated force/torque sensor under the fabric. A deployed robot pressing hanging garments has no such sensor, yet the prompt format requires force values for every tactile frame. So I collected my own dataset: 200 fabrics pressed by a GelSight Mini on the Franka arm with an ATI Nano17 beneath the fabric as ground truth—401 sessions, 12,178 presses, 99,797 usable frames after quality filtering.",
-                  "原工作的采集装置假设织物下方有一个标定好的力/力矩传感器；而真实部署时机器人按压悬挂衣物，根本没有这个传感器，但提示格式又要求每帧触觉图像都带有力数值。于是我采集了自己的数据集：在 Franka 上用 GelSight Mini 按压 200 种织物，织物下方放置 ATI Nano17 作为真值——共 401 个采集会话、12,178 次按压，质量过滤后 99,797 帧可用。"),
-                 ("Three calibrations underpin its use. Cross-correlating force with image change over 120 presses measured a 40 ms camera–force delay (the metadata claimed 20 ms); applying the correction moved the peak frame in 38% of presses. Three independent checks established that force labels are trustworthy up to 22 N. And the photometric reconstruction passed its criteria only marginally, so single-frame magnitudes are never used as absolute labels.",
-                  "三项标定支撑了它的使用：在 120 次按压上做力与图像变化的互相关，测得相机–力的时延为 40 ms（元数据声称 20 ms），校正后 38% 的按压峰值帧发生了变化；三项独立检查确定力标签在 22 N 以内可信；光度重建仅勉强通过判据，因此单帧重建幅值从不作为绝对标签使用。"))
+    body = prose(("The language model reads each tactile frame together with the contact force at which it was taken, so the robot needs a force value for every press. A robot pressing hanging garments has no force sensor in the loop—so I made the tactile image itself report the force. I collected a dedicated dataset: 200 fabrics pressed by a GelSight Mini on the Franka arm with an ATI Nano17 beneath the fabric as ground truth—401 sessions, 12,178 presses, 99,797 usable frames after quality filtering.",
+                  "语言模型读取每帧触觉图像时需要同时知道拍摄时的接触力，因此每次按压都要有一个力数值；而机器人按压悬挂衣物时回路里并没有力传感器——于是我让触觉图像自己“报出”力。为此我采集了专门的数据集：在 Franka 上用 GelSight Mini 按压 200 种织物，织物下方放置 ATI Nano17 作为真值——共 401 个采集会话、12,178 次按压，质量过滤后 99,797 帧可用。"),
+                 ("Three calibrations underpin its use. Cross-correlating force with image change over 120 presses measured a 40 ms camera–force delay; applying the correction moved the peak frame in 38% of presses. Three independent checks established that force labels are trustworthy up to 22 N. And the photometric reconstruction passed its criteria only marginally, so single-frame magnitudes are never used as absolute labels.",
+                  "三项标定支撑了它的使用：在 120 次按压上做力与图像变化的互相关，测得相机–力的时延为 40 ms，校正后 38% 的按压峰值帧发生了变化；三项独立检查确定力标签在 22 N 以内可信；光度重建仅勉强通过判据，因此单帧重建幅值从不作为绝对标签使用。"))
     body += stats([("12,178", "calibrated presses over 200 fabrics", "次标定按压，覆盖 200 种织物"),
                    ("0.33 N", "MAE on 30 fabrics never seen in training", "30 种训练中未见织物上的 MAE"),
                    ("96.3%", "of 14,728 held-out frames within 1 N", "的 14,728 帧留出帧误差 < 1 N"),
@@ -101,52 +101,52 @@ def vtla():
                "22 N 截断后自采数据的力分布。20 N 以上证据密度骤降，因此部署时的力阶梯最高取 19.9 N。"),
         figure(IMG + "vtla-fig_v2_projection.png", "Commissioning the estimator against the Nano17 itself at five plateaus (5–15 N): slope ≈ 0.99, intercept ≈ +0.08 N, every plateau within its pre-registered acceptance region.",
                "用 Nano17 对估计器做验收：5–15 N 五个平台，斜率 ≈ 0.99、截距 ≈ +0.08 N，所有平台都落在预先登记的接受区间内。"))
-    body += callout("A result that generalises beyond this project: 87% of the estimator’s improvement (0.433 → 0.326 N) came from selecting checkpoints by the quantity that is actually deployed, not from capacity or data. The input representation—raw RGB, background difference or photometric—made no statistical difference across three seeds.",
-                    "一个超出本项目的结论：估计器 87% 的提升（0.433 → 0.326 N）来自“按真正要部署的量来选检查点”，而不是更大的模型或更多数据。输入表示（原始 RGB、背景差分或光度重建）在三个随机种子下没有统计学差异。")
+    body += callout("87% of the estimator’s improvement (0.433 → 0.326 N) came from selecting checkpoints by force error—the quantity that is actually deployed—rather than from a bigger model or more data. The input representation (raw RGB, background difference or photometric reconstruction) made no statistical difference across three seeds.",
+                    "估计器 87% 的提升（0.433 → 0.326 N）来自“按力误差——也就是真正要部署的量——来选检查点”，而不是更大的模型或更多数据。输入表示（原始 RGB、背景差分或光度重建）在三个随机种子下没有统计学差异。")
     s += section("force", "Replacing the force sensor with a tactile image", "用一张触觉图像取代力传感器", body)
 
     # VLM reproduction
-    body = prose(("The released conversation files use a fixed prompt template with three formatting irregularities—two trailing spaces, an isolated zero before one force slot, a missing space in one string. Because the model is trained on those exact bytes, I treated them as part of the interface: one module generates every prompt in the project, and a verification gate rebuilds all 8,734 released prompts byte-for-byte before anything else runs.",
-                  "公开的对话文件使用固定模板，其中有三处格式“瑕疵”：两行末尾多了空格、某个力槽位前有一个孤立的 0、某个字符串少了一个空格。模型是在这些精确的字节上训练的，所以我把它们当作接口的一部分：项目里所有提示都由一个模块生成，并且在任何实验之前先用校验门逐字节重建全部 8,734 条公开提示。"),
+    body = prose(("Training data come from the public MLLM-Fabric image set—200 fabrics, each photographed and pressed by a GelSight at four increasing forces, with ordinal labels (low / medium / high) for softness, thickness, elasticity and texture. I wrote the whole pipeline on top of it: a single prompt generator that turns a fabric pair into a question, an image compositor, the training loop, and the evaluation harness. Every comparison in the project—3,937 training pairs, 400 test pairs, and 34,883 pairs I constructed myself—goes through that one generator.",
+                  "训练数据来自公开的 MLLM-Fabric 图像集——200 种织物，每种都有 RGB 照片和 GelSight 在四个递增力值下的按压图像，并在柔软度、厚度、弹性、纹理四个属性上标注了低/中/高三个等级。我在此之上写了完整的流水线：把一对织物变成一个问题的提示生成器、拼图模块、训练循环和评测框架。项目里所有比较——3,937 组训练对、400 组测试对，以及我自己构造的 34,883 组——都经由这同一个生成器。"),
                  ("Qwen2.5-VL-7B-Instruct was fine-tuned with QLoRA (4-bit base, rank-32 adapters, 80.7 M trainable parameters) on a single H100. Each input is a composite image—two rows, one per fabric: an RGB view followed by four GelSight frames at increasing force—plus the force values in text. I measured that beyond the processor’s pixel budget a larger stored image adds no model-visible resolution, which let me cut the upload from 11.76 GB to 1.77 GB with pixel-level equivalence.",
                   "Qwen2.5-VL-7B-Instruct 在单张 H100 上用 QLoRA 微调（4-bit 基座、秩 32 适配器、80.7 M 可训练参数）。每个输入是一张拼接图：两行各代表一块织物，先是 RGB 视图，然后是四帧力逐渐增大的 GelSight 图像，再加上文本中的力数值。我验证了超过处理器像素预算后更大的图片不会增加模型可见的分辨率，于是把上传量从 11.76 GB 压到 1.77 GB 而保持像素级等价。"))
     body += figure(IMG + "vtla-composite-input.jpg", "An actual composite input from the robot demonstration (fabrics F1 and F2). Each row is one fabric: an RGB view, then GelSight frames selected at the force ladder 0 / 13.5 / 16.8 / 19.9 N.",
                    "真机演示中的一张真实输入（织物 F1 与 F2）。每行一块织物：RGB 视图，然后是按 0 / 13.5 / 16.8 / 19.9 N 力阶梯选出的 GelSight 帧。", wide=True)
     body += h(3, "Two readouts, and a precision trap", "两种读出方式，以及一个精度陷阱")
-    body += prose(("A generative model has to be turned into a discrete answer somehow. I built two instruments. A free-text parser, calibrated against all 3,937 released rationales with a measured noise floor of 1.94 percentage points—the first, uncalibrated version carried a 6.36-point bias, direct evidence that extraction is part of the measuring instrument. And a forced-choice readout that compares candidate log-likelihoods, which needs no parser but is numerically fragile: in bfloat16 the representable values near a log-likelihood of 16–32 are 0.125 apart, while genuine differences are often 0.01–0.2. An early bf16 run collapsed most items into exact ties and produced a plausible-looking but fake accuracy of 0.75. All scoring is now in fp32; none of the 7,600 scored items tied.",
-                   "生成式模型的输出总得变成一个离散答案。我做了两套工具：一个用全部 3,937 条公开解释标定过的自由文本解析器，测得噪声底 1.94 个百分点——未标定的第一版有 6.36 个百分点的系统偏差，直接证明了“答案抽取本身就是测量仪器的一部分”；另一个是比较候选答案对数似然的强制二选一读出，它不需要解析器，但在数值上很脆弱：bfloat16 在对数似然 16–32 附近的可表示间隔是 0.125，而真实差异常常只有 0.01–0.2。早期一次 bf16 运行把大部分样本压成了精确平局，得到一个看似合理实则虚假的 0.75 准确率。现在所有打分都用 fp32，7,600 个样本中没有一个平局。"),)
+    body += prose(("A generative model has to be turned into a discrete answer somehow. I built two instruments. A free-text parser, calibrated against all 3,937 training rationales with a measured noise floor of 1.94 percentage points—the first, uncalibrated version carried a 6.36-point bias, which is why I calibrate the parser before trusting any number it produces. And a forced-choice readout that compares candidate log-likelihoods, which needs no parser but is numerically fragile: in bfloat16 the representable values near a log-likelihood of 16–32 are 0.125 apart, while genuine differences are often 0.01–0.2. An early bf16 run collapsed most items into exact ties and produced a plausible-looking but fake accuracy of 0.75. All scoring is now in fp32; none of the 7,600 scored items tied.",
+                   "生成式模型的输出总得变成一个离散答案。我做了两套工具：一个用全部 3,937 条训练解释标定过的自由文本解析器，测得噪声底 1.94 个百分点——未标定的第一版有 6.36 个百分点的系统偏差，所以解析器必须先标定再使用；另一个是比较候选答案对数似然的强制二选一读出，它不需要解析器，但在数值上很脆弱：bfloat16 在对数似然 16–32 附近的可表示间隔是 0.125，而真实差异常常只有 0.01–0.2。早期一次 bf16 运行把大部分样本压成了精确平局，得到一个看似合理实则虚假的 0.75 准确率。现在所有打分都用 fp32，7,600 个样本中没有一个平局。"),)
     body += two_col(
         figure(IMG + "vtla-fig_margin.png", "Forced-choice margins for four representative cells: zero-shot margins sit near zero, fine-tuned margins an order of magnitude higher. Zero exact ties in 7,600 items.",
                "四个代表性单元的强制选择置信差：零样本模型接近零，微调后高出一个数量级。7,600 个样本零平局。"),
         figure(IMG + "vtla-fig_runtime.png", "Measured cloud-runtime model from a two-point method: 50.6 s fixed cost plus 23.6 s per sample on an H100—the number that sized the robot run.",
                "两点法测得的云端运行时模型：H100 上固定开销 50.6 s，每样本 23.6 s——真机运行的时间预算就来自这里。"))
-    s += section("vlm", "Rebuilding the language model, byte for byte", "逐字节重建语言模型", body, cls="alt")
+    s += section("vlm", "Teaching a vision–language model to compare fabrics by touch", "让视觉-语言模型学会用触觉比较织物", body, cls="alt")
 
     # Protocol
-    body = prose(("Here is the finding I am proudest of. The training and test sets of the released protocol share 186 of 200 fabrics, and every test pair compares fabrics whose property levels differ by two grades. A level look-up table built from the training pairs alone—without looking at a single pixel—answers all 400 official test items correctly. So I report every accuracy next to the look-up ceiling of its own (training set, test set) pair, and I constructed complementary protocols whose ceilings are different.",
-                  "这是我最得意的一个发现。公开协议的训练集与测试集共享 200 种织物中的 186 种，而且所有测试对比较的都是属性等级相差两级的织物。仅凭训练对建立一张等级查找表——一个像素都不看——就能答对全部 400 道官方测试题。因此我把每个准确率都与它所在（训练集, 测试集）组合的查表上限并列报告，并构造了上限不同的互补协议。"),
-                 ("On the official protocol the fine-tuned model scores 0.985 (ceiling 1.00) from a zero-shot baseline of 0.49. On a fabric-disjoint split I designed—zero look-up coverage, verified by a domain probe at chance with a positive control at 1.00—the same configuration scores 0.865 against a 0.50 ceiling: real, transferable tactile comparison. A size-matched control that saw the test fabrics at equal training volume returns to 0.985, pricing the seen-fabric contribution at +0.12, concentrated almost entirely in Elasticity (+0.37).",
-                  "在官方协议上，微调模型从零样本的 0.49 提升到 0.985（上限 1.00）。在我设计的织物不相交划分上——查表覆盖率为零，并用域探针验证（探针处于随机水平，而阳性对照达到 1.00）——同样的配置得到 0.865，对应上限只有 0.50：这是真实的、可迁移的触觉比较能力。而一个在相同训练量下见过测试织物的规模匹配对照回到 0.985，说明“见过织物”的贡献是 +0.12，且几乎全部集中在弹性这一属性上（+0.37）。"))
+    body = prose(("A high score on fabrics the model has already touched proves little: if the training pairs reveal every fabric’s level, a look-up table answers the test without reading a single pixel. So I designed the evaluation around that risk. For every (training set, test set) pair I compute how far pure look-up could get—the ceiling—and report each accuracy next to it. And I built a second test on fabrics the model never saw: a 160/40 fabric-disjoint split in which no training pair involves a test fabric, verified by a learned domain probe that cannot tell the two sides apart.",
+                  "在模型已经摸过的织物上拿高分并不能说明什么：如果训练对已经暴露了每块织物的等级，一张查找表一个像素都不用看就能答题。所以我把评测设计围绕这个风险展开：对每一组（训练集, 测试集）都计算纯查表能达到的上限，并把每个准确率与上限并列报告；同时构造了一个模型从未见过的织物测试——160/40 的织物不相交划分，没有任何训练对涉及测试织物，并用学习型域探针验证两侧无法区分。"),
+                 ("Results: on the seen-fabric test the fine-tuned model scores 0.985, up from 0.49 for the untuned base model. On the unseen-fabric test the same configuration scores 0.865 against a 0.50 ceiling—tactile comparison that transfers to new material. A size-matched control that saw the test fabrics at the same training volume returns to 0.985, so having touched a fabric before is worth +0.12, concentrated almost entirely in Elasticity (+0.37); Thickness and Texture generalise almost perfectly.",
+                  "结果：在已见织物测试上，微调模型从未微调基座的 0.49 提升到 0.985；在未见织物测试上，同样的配置在 0.50 的上限下得到 0.865——这是能迁移到新材料上的触觉比较能力。一个在相同训练量下见过测试织物的规模匹配对照回到 0.985，说明“摸过这块布”值 +0.12，而且几乎全部集中在弹性这一属性上（+0.37）；厚度与纹理几乎完美泛化。"))
     body += two_col(
-        figure(IMG + "vtla-fig_t1_gap.png", "Forced-choice accuracy with per-cell look-up ceilings (red). Left: the official test, where every fine-tuned run sits just below a ceiling of 1.00. Right: the fabric-disjoint test, where the held-out adapter reaches 0.865 against a 0.50 ceiling.",
-               "带逐单元查表上限（红色）的强制选择准确率。左：官方测试集，所有微调模型都紧贴 1.00 的上限；右：织物不相交测试集，留出适配器在 0.50 的上限下达到 0.865。"),
+        figure(IMG + "vtla-fig_t1_gap.png", "Forced-choice accuracy with per-cell look-up ceilings (red). Left: the seen-fabric test, where every fine-tuned run sits just below a ceiling of 1.00. Right: the unseen-fabric test, where the model reaches 0.865 against a 0.50 ceiling.",
+               "带逐单元查表上限（红色）的强制选择准确率。左：已见织物测试集，所有微调模型都紧贴 1.00 的上限；右：未见织物测试集，模型在 0.50 的上限下达到 0.865。"),
         figure(IMG + "vtla-fig_unseen.png", "The seen-fabric contribution by property (n = 100 each): Elasticity +0.37, Softness +0.10, Texture +0.01, Thickness 0.00.",
                "按属性拆分“见过织物”的贡献（每项 n = 100）：弹性 +0.37，柔软度 +0.10，纹理 +0.01，厚度 0.00。"))
     body += h(3, "A harder task at zero annotation cost", "零标注成本的更难任务")
-    body += prose(("The released annotations already determine every adjacent-level comparison. Enumerating ordered pairs that differ by one grade yields 63,300 candidates with no new labelling. Models trained on official pairs transfer to this finer task imperfectly (0.839 against a 0.50 ceiling); adding 4,000 enumerated pairs raises it to 0.975. Controlled ablations bound what the model actually uses: swapping the side indices changes 4 of 400 predictions; rewriting the force text to the deployment ladder changes none—with a power analysis showing that in this high-margin cell no perturbation of that size could have flipped a prediction, so the result is reported as a compound, not as universal insensitivity.",
-                   "公开标注其实已经决定了所有相邻等级的比较。枚举等级相差一级的有序对，可得 63,300 个候选而不需要任何新标注。只用官方数据训练的模型迁移到这个更细的任务上并不完美（0.839，上限 0.50）；加入 4,000 个枚举对后提升到 0.975。受控消融界定了模型究竟用了什么：交换左右索引只改变 400 个预测中的 4 个；把力文本改写成部署阶梯一个都不变——功效分析表明在这个高置信差单元里这种幅度的扰动本就不可能翻转任何预测，所以这一结果被报告为复合结论，而不是“模型对力不敏感”。"),)
+    body += prose(("The standard pairs only compare fabrics two grades apart. Real sorting is harder—the difference is often one grade—and the ordinal labels already determine every such comparison: enumerating ordered pairs one grade apart gave me 63,300 adjacent-level pairs with no new labelling. A model trained on two-grade pairs alone reaches 0.839 on this finer task (ceiling 0.50); adding 4,000 of the enumerated pairs to training raises it to 0.975. Ablations then bound what the model actually relies on: swapping the left/right indices changes only 4 of 400 predictions, and rewriting the force text to the robot’s own force ladder changes none, so the deployment force range does not disturb the model.",
+                   "标准的比较对只涉及相差两级的织物。真实分拣更难——差别往往只有一级——而等级标注本身已经决定了所有这类比较：枚举相差一级的有序对，我得到了 63,300 组相邻等级对，不需要任何新标注。只用两级对训练的模型在这个更细的任务上达到 0.839（上限 0.50）；把 4,000 组枚举对加入训练后提升到 0.975。消融实验进一步界定了模型真正依赖什么：交换左右索引只改变 400 个预测中的 4 个；把力文本改写成机器人自己的力阶梯一个都不变——说明部署时的力范围不会干扰模型。"),)
     body += two_col(
         figure(IMG + "vtla-fig_adjacent.png", "Adjacent-level results with per-cell ceilings. Adding enumerated pairs improves the task substantially but also moves the cell ceiling; the two numbers are always read together.",
                "相邻等级任务的结果与逐单元上限。加入枚举对显著提升了任务表现，同时也抬高了上限；两个数字必须一起看。"),
         figure(IMG + "vtla-fig_probe.png", "Force-text probes: margins barely move across identity, deployment-ladder and ladder-plus-zero variants, and the largest perturbation sits below the smallest identity margin.",
                "力文本扰动探针：在原样、部署阶梯、阶梯加零三个变体之间置信差几乎不动，最大扰动量低于最小原始置信差。"))
-    s += section("protocol", "What an accuracy actually measures", "一个准确率到底衡量了什么", body)
+    s += section("protocol", "Testing on fabrics the model has never touched", "在模型从未摸过的织物上检验", body)
 
     # Robot demo
-    body = prose(("The deployment chain runs locally except for VLM scoring, which reuses the benchmark evaluator unchanged—same script and adapter, verified by hash. A press trajectory is taught once under zero stiffness by guiding the arm by hand, validated against four recorded-trajectory checks, then replayed with a hard stop that halts the arm within one 20 ms control cycle. Every captured GelSight frame receives a force estimate; a slot selector picks one pre-contact frame and three loading frames nearest the ladder targets, subject to six gates.",
-                  "部署链除了 VLM 打分之外全部在本地运行，打分复用基准评测器且不做任何修改——脚本与适配器都经哈希校验一致。按压轨迹在零刚度下手把手示教一次，通过四项轨迹记录检查后回放，并配有能在一个 20 ms 控制周期内停住机械臂的硬停保护。每一帧 GelSight 图像都得到一个力估计；槽位选择器按六道门选出一帧接触前帧和三帧最接近阶梯目标的加载帧。"),
-                 ("Four garments give six unordered pairs per property, each evaluated in both presentation orders; a pair counts only if both orders choose the same physical garment. The run completed 48 prompts in 1,005 s, exactly as the two-point timing model predicted. 18 of 24 comparisons were order-consistent; the six contradictions were left unresolved rather than papered over. For the query “suitable for summer clothing” the recommendation layer selected garment F4—lowest thickness, weighted against softness and texture—and attached a warning that elasticity evidence is weak, which is precisely the property that scored lowest on the fabric-disjoint protocol.",
-                  "四件衣物在每种属性上构成六个无序对，每对按两种呈现顺序各评一次；只有两种顺序都选中同一件实物时才算数。整轮运行 48 条提示用了 1,005 s，与两点法时间模型的预测完全吻合。24 次比较中 18 次顺序一致，6 次矛盾被如实保留而不是掩盖。对于“适合夏天穿”的查询，推荐层选中了 F4——厚度最低，并以柔软度和纹理加权——同时附上“弹性证据较弱”的提示，而弹性正是织物不相交协议上得分最低的属性。"))
+    body = prose(("The deployment chain runs locally except for VLM scoring, which runs on a cloud H100 with the same evaluator and adapter as the benchmark, verified by hash. A press trajectory is taught once under zero stiffness by guiding the arm by hand, validated against four recorded-trajectory checks, then replayed with a hard stop that halts the arm within one 20 ms control cycle. Every captured GelSight frame receives a force estimate; a slot selector picks one pre-contact frame and three loading frames nearest the ladder targets, subject to six gates.",
+                  "部署链除了 VLM 打分之外全部在本地运行，打分在云端 H100 上进行，使用与基准测试完全相同、经哈希校验的评测器与适配器。按压轨迹在零刚度下手把手示教一次，通过四项轨迹记录检查后回放，并配有能在一个 20 ms 控制周期内停住机械臂的硬停保护。每一帧 GelSight 图像都得到一个力估计；槽位选择器按六道门选出一帧接触前帧和三帧最接近阶梯目标的加载帧。"),
+                 ("Four garments give six unordered pairs per property, each evaluated in both presentation orders; a pair counts only if both orders choose the same physical garment. The run completed 48 prompts in 1,005 s, exactly as the two-point timing model predicted. 18 of 24 comparisons were order-consistent; the six contradictions were left unresolved rather than papered over. For the query “suitable for summer clothing” the recommendation layer selected garment F4—lowest thickness, weighted against softness and texture—and attached a warning that elasticity evidence is weak—the property that scored lowest on the unseen-fabric test.",
+                  "四件衣物在每种属性上构成六个无序对，每对按两种呈现顺序各评一次；只有两种顺序都选中同一件实物时才算数。整轮运行 48 条提示用了 1,005 s，与两点法时间模型的预测完全吻合。24 次比较中 18 次顺序一致，6 次矛盾被如实保留而不是掩盖。对于“适合夏天穿”的查询，推荐层选中了 F4——厚度最低，并以柔软度和纹理加权——同时附上“弹性证据较弱”的提示——弹性正是未见织物测试中得分最低的属性。"))
     body += figure(IMG + "vtla-sequence.jpg", "The executed sequence. (a) Home. (b)–(e) The arm presses each garment in turn, pinching fabric between the GelSight face and the backing paddle. (f) After ranking, the tapered fingers pass through the chosen garment and close on a single layer. (g) It is carried to the basket. (h) The arm moves to the next garment.",
                    "执行序列。(a) 初始位姿；(b)–(e) 机械臂依次按压每件衣物，把织物夹在 GelSight 与背板之间；(f) 排序后，渐缩手指穿过选中的衣物并夹住单层；(g) 运送到篮筐；(h) 转向下一件衣物。", wide=True)
     body += h(3, "Action policy: π0.5 and teleoperated demonstrations", "动作策略：π0.5 与遥操作示教")
@@ -168,16 +168,16 @@ def vtla():
         ("Hardware", "硬件", "Designed and printed the end-effector; built the force-collection rig with the ATI Nano17; ran 401 collection sessions.", "设计并打印末端执行器；搭建带 ATI Nano17 的力采集装置；完成 401 个采集会话。"),
         ("Data and calibration", "数据与标定", "Sync-delay measurement, trust range, photometric checks, fabric-disjoint split with a domain probe.", "同步时延测量、可信范围、光度检查，以及带域探针的织物不相交划分。"),
         ("Models", "模型", "ResNet-18 load estimator; QLoRA fine-tuning of Qwen2.5-VL-7B across eight training configurations; π0.5 teleop pipeline.", "ResNet-18 力估计器；Qwen2.5-VL-7B 的八种训练配置 QLoRA 微调；π0.5 遥操作流水线。"),
-        ("Evaluation", "评测", "Byte-verified prompts, calibrated parser, fp32 forced choice, per-cell ceilings, perturbation probes with power analysis.", "逐字节校验提示、标定解析器、fp32 强制选择、逐单元上限、带功效分析的扰动探针。"),
+        ("Evaluation", "评测", "Prompt and image pipeline, calibrated parser, fp32 forced choice, unseen-fabric split with per-cell ceilings, perturbation probes.", "提示与拼图流水线、标定解析器、fp32 强制选择、带逐单元上限的未见织物划分、扰动探针。"),
         ("Deployment", "部署", "Teach-and-replay with hard stops, gated slot selection, hash-linked provenance from press to recommendation.", "带硬停的示教回放、门控槽位选择、从按压到推荐的哈希链路溯源。"),
     ])
     body += links([(CV + "VTLA_Report_Chengqi_Xue.pdf", "Read the dissertation (PDF)", "阅读毕业论文（PDF）")])
-    body += callout("All VLM runs use a single seed; the four-garment demonstration has no independent property ground truth and is an integration and traceability test, not an accuracy claim. I would rather state the limits than overclaim.",
-                    "所有 VLM 实验都使用单一随机种子；四件衣物的演示没有独立的属性真值，它是一次集成与可追溯性测试，而不是准确率声明。我宁愿把边界说清楚，也不愿夸大结果。", kind="warn")
-    s += section("contrib", "What I built, and what I would say in the room", "我做了什么，以及我会如何坦诚说明", body)
+    body += callout("Scope: all VLM runs use a single seed, and the four-garment demonstration is an integration test of the full loop rather than an accuracy measurement, since the garments have no independent property labels.",
+                    "说明：所有 VLM 实验使用单一随机种子；四件衣物的演示是对完整闭环的集成测试，而非准确率测量，因为这些衣物没有独立的属性标签。")
+    s += section("contrib", "My contribution", "我做的部分", body)
 
     page("vtla", pr['title'][0], pr['title'][1],
-         "Vision–tactile–language–action learning on a Franka arm: GelSight touch, a force estimator that replaces the force sensor, a QLoRA-tuned Qwen2.5-VL and a real-robot fabric-sorting demonstration.",
+         "Vision–tactile–language–action learning on a Franka arm: GelSight touch, a tactile force estimator, a QLoRA-tuned Qwen2.5-VL that compares fabrics by touch, and a real-robot fabric-sorting demonstration.",
          hero, hero_media, s)
 
 
@@ -193,17 +193,23 @@ def umi():
         ("Hardware", "硬件", "UMI-style hand-held gripper, wrist fisheye camera, custom GelSight + GelSight Mini, Meta Quest, Franka FR3 with Robotiq gripper", "UMI 式手持夹爪、手腕鱼眼相机、自制 GelSight + GelSight Mini、Meta Quest、带 Robotiq 夹爪的 Franka FR3"),
         ("Software", "软件", "openpi / π0.5, LeRobot format, Zarr + H5 pipelines, ArUco calibration, Rerun audit viewer", "openpi / π0.5、LeRobot 格式、Zarr + H5 流水线、ArUco 标定、Rerun 审计查看器"),
     ])
-    hero_media = video(VID + "umi-pi05-demo.mp4", VID + "umi-pi05-demo.jpg",
-                       "π0.5 fine-tuned on the Tactile UMI demonstrations, running autonomously on the Franka FR3 at 5× speed. The on-screen counter tallies successful rollouts as they happen.",
-                       "在 Tactile UMI 示教上微调的 π0.5，在 Franka FR3 上自主运行（5 倍速）。屏幕上的计数器实时统计成功回放次数。", wide=True)
+    hero_media = two_col(
+        video(VID + "umi-pi05-demo.mp4", VID + "umi-pi05-demo.jpg",
+              "π0.5 fine-tuned on the Tactile UMI demonstrations, running autonomously on the Franka FR3 at 5× speed. The on-screen counter tallies successful rollouts as they happen.",
+              "在 Tactile UMI 示教上微调的 π0.5，在 Franka FR3 上自主运行（5 倍速）。屏幕上的计数器实时统计成功回放次数。", cls="square"),
+        '<div class="hero-side">' + h(3, "What the video shows", "视频里发生了什么") + prose(
+            ("The FR3 carries the same Robotiq gripper and GelSight fingertips as the hand-held UMI, so the policy sees the world the way the demonstrations did. Each rollout starts from a reset pose; the policy receives the wrist image and robot state, predicts a chunk of camera-relative actions, and the arm moves the object toward the target.",
+             "FR3 装着与手持 UMI 相同的 Robotiq 夹爪和 GelSight 指尖，所以策略看到的世界与示教时一致。每次回放从复位位姿开始；策略接收手腕图像与机器人状态，预测一段相机坐标系下的动作块，机械臂把物体移向目标。"),
+            ("No teleoperation, no scripted waypoints: every motion comes from π0.5 fine-tuned on 222 hand-held demonstrations.",
+             "没有遥操作，也没有预设路径点：所有动作都来自在 222 条手持示教上微调的 π0.5。")) + '</div>', cls="c12")
     s = ''
     s += section("why", "The idea", "项目思路", prose(
         ("Universal Manipulation Interface (UMI) showed that a hand-held gripper with a wrist camera lets people collect robot demonstrations anywhere, far faster than teleoperation. But a wrist camera cannot tell how hard the fingers are squeezing, whether an object has started to slip, or what a cloth feels like. We added touch: two GelSight fingertips record a tactile video stream next to the RGB stream, Quest tracking supplies the 6-DoF pose, and an ArUco marker gives the gripper width.",
          "Universal Manipulation Interface（UMI）证明了带手腕相机的手持夹爪可以让人在任何地方采集机器人示教，比遥操作快得多。但手腕相机看不出手指捏得多紧、物体是否开始打滑、一块布摸起来是什么感觉。于是我们加上了触觉：两个 GelSight 指尖在 RGB 流旁边同步记录触觉视频，Quest 追踪提供六自由度位姿，ArUco 标记给出夹爪开度。"),
         ("The hard part is not the sensors but trusting them together. Four streams with four clocks and four coordinate frames have to become one robot-ready timeline, and every transformation has to be measured before it is used. We treated calibration and data quality as part of the learning system, not as hidden setup—every episode is inspectable from acquisition through alignment, curation and deployment.",
          "难点不在传感器本身，而在于让它们一起可信。四路数据流、四个时钟、四个坐标系必须合成一条机器人可用的时间线，每一个变换在使用前都要先测出来。我们把标定和数据质量当作学习系统的一部分，而不是看不见的前置工作——每条示教从采集、对齐、筛选到部署都可以被检视。"),
-        ("Then the corpus split into two policy branches. My lab mate trained a tactile-conditioned Diffusion Policy; I converted the same demonstrations to LeRobot format and fine-tuned π0.5, a vision-language-action model, and deployed it on the FR3. This page tells the π0.5 side of the story.",
-         "随后数据被用于两条策略分支：实验室同学训练了触觉条件化的 Diffusion Policy；我把同一批示教转换成 LeRobot 格式，微调视觉-语言-动作模型 π0.5，并部署到 FR3 上。这一页讲的是 π0.5 这一侧的故事。")))
+        ("Then the corpus split into two policy branches. My lab mate trained a tactile-conditioned Diffusion Policy; I converted the same demonstrations to LeRobot format and fine-tuned π0.5, a vision-language-action model, and deployed it on the FR3. This page covers the π0.5 branch.",
+         "随后数据被用于两条策略分支：实验室同学训练了触觉条件化的 Diffusion Policy；我把同一批示教转换成 LeRobot 格式，微调视觉-语言-动作模型 π0.5，并部署到 FR3 上。这一页介绍 π0.5 这一分支。")))
 
     body = figure(IMG + "umi-workflow.jpg", "End-to-end workflow: system setup and calibration → collection and curation → representation and policy learning. Each stage produces a traceable artifact; geometry, timing and data quality are closed before training.",
                   "端到端工作流：系统搭建与标定 → 采集与筛选 → 表示与策略学习。每个阶段都产出可追溯的产物；几何、时序与数据质量在训练前全部闭环。", wide=True, cls="plain")
@@ -244,19 +250,18 @@ def umi():
                    ("135,952", "policy frames", "个策略帧"),
                    ("77", "demonstrations in the strict subset used for the controlled comparison", "条示教组成受控对比用的严格子集"),
                    ("7-D", "camera-relative actions: translation, rotation, gripper width", "相机相对动作：平移、旋转、夹爪开度")])
-    body += two_col(
-        video(VID + "umi-collection.mp4", VID + "umi-collection.jpg", "Portable collection: the hand-held gripper, wrist camera and tactile fingertips in the task workspace, with the FR3 standing by (16× speed).",
-              "便携采集：手持夹爪、手腕相机与触觉指尖在任务工作区中，FR3 在一旁待命（16 倍速）。"),
-        video(VID + "umi-audit.mp4", VID + "umi-audit.jpg", "The audit viewer replaying an archived episode: trajectory in 3D, both tactile streams and the wrist view on one timeline.",
-              "审计查看器回放一条归档示教：3D 轨迹、两路触觉流与手腕视角在同一条时间线上。"))
+    body += video(VID + "umi-collection.mp4", VID + "umi-collection.jpg", "Portable collection: the hand-held gripper, wrist camera and tactile fingertips in the task workspace, with the FR3 standing by (16× speed).",
+                  "便携采集：手持夹爪、手腕相机与触觉指尖在任务工作区中，FR3 在一旁待命（16 倍速）。", wide=True)
+    body += video(VID + "umi-audit.mp4", VID + "umi-audit.jpg", "The audit viewer replaying an archived episode: trajectory in 3D, both tactile streams and the wrist view on one timeline.",
+                  "审计查看器回放一条归档示教：3D 轨迹、两路触觉流与手腕视角在同一条时间线上。", wide=True)
     s += section("data", "Record first, align second, audit before training", "先记录，再对齐，训练前先审计", body, cls="alt")
 
     body = prose(("π0.5 is a vision-language-action model: a PaliGemma vision-language backbone with an action expert that generates action chunks by flow matching, pre-trained on large robot corpora and designed to be fine-tuned on a few hundred demonstrations. That makes it a natural match for a UMI corpus, which is exactly a few hundred demonstrations with a wrist view and a 7-D action.",
                   "π0.5 是一个视觉-语言-动作模型：PaliGemma 视觉语言骨干加上一个用流匹配生成动作块的动作专家，在大规模机器人数据上预训练，设计目标就是用几百条示教微调。这与 UMI 语料天然匹配——它正是几百条带手腕视角和 7 维动作的示教。"),
                  ("My branch: convert the clean Zarr corpus into LeRobot format (images, proprioceptive state, action chunks and a natural-language task prompt per episode), compute the normalisation statistics, fine-tune π0.5 with LoRA on a single GPU using the openpi stack, and serve the policy to the FR3 over a websocket inference server. At run time the policy receives the wrist image and robot state, predicts a 50-step chunk of camera-relative 7-D actions, and the controller converts them through inverse kinematics into joint commands. Rollouts were scored live with a success counter.",
                   "我的分支：把干净的 Zarr 语料转换成 LeRobot 格式（每条示教包含图像、本体状态、动作块和一条自然语言任务指令），计算归一化统计量，用 openpi 在单卡上以 LoRA 微调 π0.5，再通过 websocket 推理服务器把策略提供给 FR3。运行时策略接收手腕图像与机器人状态，预测 50 步相机相对的 7 维动作块，控制器经逆运动学转换为关节指令。实机回放用成功计数器实时记录。"),
-                 ("Running a VLA and a Diffusion Policy on one calibrated corpus is the part I value most. The controlled comparison on the lab mate’s side—vision-only Diffusion Policy 10/34 versus UniForce-conditioned 14/34 on a contact task, not statistically significant at that sample size—set the bar for how carefully a result on this corpus should be stated, and my π0.5 rollouts are reported in the same spirit: as systems evidence that the data pipeline produces trajectories a modern VLA can learn from, not as a benchmark claim.",
-                  "在同一套标定过的语料上同时跑 VLA 和 Diffusion Policy，是我最看重的部分。同学那边的受控对比——接触任务上纯视觉 Diffusion Policy 10/34 对 UniForce 条件化 14/34，在该样本量下未达统计显著——为“这套数据上的结论该说得多谨慎”定了标准；我的 π0.5 回放也以同样的态度呈现：作为“数据流水线能产出现代 VLA 可学习的轨迹”的系统性证据，而不是基准测试的结论。"))
+                 ("Running a VLA and a Diffusion Policy on one calibrated corpus is what makes the two branches comparable. On the Diffusion Policy side, vision-only scored 10/34 and the tactile-conditioned version 14/34 on the contact task; the π0.5 rollouts show that the same data pipeline produces trajectories a modern VLA can learn from and execute on the real FR3.",
+                  "在同一套标定过的语料上同时跑 VLA 和 Diffusion Policy，才让两条分支可以互相比较。Diffusion Policy 那边，纯视觉版本在接触任务上 10/34，触觉条件化版本 14/34；π0.5 的真机回放则表明同一条数据流水线产出的轨迹，现代 VLA 可以学会并在真实 FR3 上执行。"))
     body += contributions([
         ("Hand-held system", "手持系统", "Mounting the cameras and tactile sensors, Quest integration, gripper-width marker and lookup table.", "相机与触觉传感器安装、Quest 集成、夹爪开度标记与查表。"),
         ("Calibration", "标定", "Hand–eye calibration, ArUco trajectory checks on the FR3, latency measurement between streams.", "手眼标定、FR3 上的 ArUco 轨迹验证、各流之间的时延测量。"),
@@ -266,8 +271,8 @@ def umi():
     body += links([("https://github.com/SuhangXia/tactile-umi", "Tactile UMI repository", "Tactile UMI 代码仓库"),
                    ("https://arxiv.org/abs/2602.01153", "UniForce on arXiv", "UniForce 论文（arXiv）"),
                    ("https://www.physicalintelligence.company/blog/pi05", "π0.5 by Physical Intelligence", "π0.5（Physical Intelligence）")])
-    body += callout("Credit where it is due: the Tactile UMI system and corpus are joint work with Suhang Xia; the UniForce tactile representation is an external method developed under the guidance of Zhuo Chen. The π0.5 fine-tuning and FR3 deployment described here are my branch.",
-                    "说明：Tactile UMI 系统与数据集是与夏苏杭的共同工作；UniForce 触觉表示是在陈卓指导下的外部方法。本页描述的 π0.5 微调与 FR3 部署是我负责的分支。")
+    body += callout("The Tactile UMI system and corpus are joint work with Suhang Xia; the UniForce tactile representation was developed under the guidance of Zhuo Chen. The π0.5 fine-tuning and FR3 deployment described here are my branch.",
+                    "Tactile UMI 系统与数据集是与夏苏杭的共同工作；UniForce 触觉表示在陈卓指导下完成。本页描述的 π0.5 微调与 FR3 部署是我负责的分支。")
     s += section("pi05", "Fine-tuning π0.5 on the corpus", "在语料上微调 π0.5", body)
 
     page("tactile-umi", pr['title'][0], pr['title'][1],
@@ -332,8 +337,8 @@ def tiago():
 <tr><td>{t("Collisions per trial", "每次试验碰撞次数")}</td><td class="num">0.1</td><td>{t("Recovery events per trial", "每次试验恢复行为次数")}</td><td class="num">0.3</td></tr>
 <tr><td>{t("Final orientation error", "终点朝向误差")}</td><td class="num">7.4°</td><td>{t("Manual interventions per trial", "每次试验人工干预次数")}</td><td class="num">0.2</td></tr>
 </tbody></table>'''
-    body += callout("All results are from simulation under simplified sensing and human motion; hardware integration on the physical TIAGo was not achieved. The work is a quantitatively supported proof of concept, and the ethics analysis—privacy, dignity, escalation to staff—was treated as a design constraint rather than an afterthought.",
-                    "所有结果都来自感知与人体运动被简化的仿真环境；实体 TIAGo 的硬件集成未能完成。这项工作是有量化支撑的概念验证，而伦理分析——隐私、尊严、向医护升级——被当作设计约束而不是事后补充。", kind="warn")
+    body += callout("All results are from simulation; hardware integration on the physical TIAGo was not completed within the project window. Privacy, patient dignity and escalation to staff were built in as design constraints from the start.",
+                    "所有结果来自仿真环境；实体 TIAGo 的硬件集成未能在项目周期内完成。隐私、患者尊严与向医护升级从一开始就作为设计约束纳入。")
     body += contributions([
         ("Simulation", "仿真", "Platform evaluation; Webots ward world with TIAGo, furniture and moving agents inside the HuNavSim container.", "仿真平台评估；在 HuNavSim 容器中搭建带 TIAGo、家具与移动行人的 Webots 病房场景。"),
         ("Navigation", "导航", "The full SLAM → AMCL → Nav2 pipeline, costmap inflation tuning, stand-off goal computation and the Docker goal bridge.", "完整的 SLAM → AMCL → Nav2 流水线、代价地图膨胀调参、停靠目标计算与 Docker 目标桥接。"),
@@ -343,6 +348,7 @@ def tiago():
     body += links([(CV + "TIAGo_Group_Project_Report.pdf", "Group project portfolio (PDF)", "小组项目报告（PDF）"),
                    ("https://github.com/Lixiangqi2002/hunavsim_docker", "HuNavSim Docker (simulation base)", "HuNavSim Docker（仿真基础）"),
                    ("https://cyberbotics.com/doc/guide/tutorials", "Webots documentation", "Webots 文档")])
+    body += figure(IMG + "tiago-poster-day.jpg", "Poster day with the team and our supervisor, King’s College London, 2026.", "海报日：与团队和导师合影，伦敦国王学院，2026。", cls="mid")
     body += f'<div class="gallery g2" style="max-width:30rem"><figure class="fig"><img src="{IMG}logo-gstt.jpg" alt="Guy’s and St Thomas’ NHS Foundation Trust" loading="lazy"></figure><figure class="fig"><img src="{IMG}logo-pal.jpg" alt="PAL Robotics" loading="lazy"></figure></div>'
     s += section("results", "Results", "结果", body, cls="alt")
     page("tiago", pr['title'][0], pr['title'][1],
@@ -578,8 +584,8 @@ def hri30():
          "torchvision 的 r3d_18 加载 Kinetics-400 权重并替换全连接头；交叉熵损失，Adam 1e-4，batch 8，30 轮，保留验证集最优检查点。"),
         ("Skeleton model", "骨架模型", "An ST-GCN implemented from scratch: a normalised COCO-17 adjacency (D^−1/2 A D^−1/2 with self-loops), six blocks of graph convolution + 9×1 temporal convolution + residual (64→64→128→128→256→256, two temporal stride-2 downsamplings), global pooling and a linear classifier. Adam 1e-3, batch 32, 40 epochs.",
          "从零实现的 ST-GCN：归一化的 COCO-17 邻接矩阵（带自环的 D^−1/2 A D^−1/2），六个“图卷积 + 9×1 时间卷积 + 残差”模块（64→64→128→128→256→256，两次时间步长 2 下采样），全局池化与线性分类器。Adam 1e-3，batch 32，40 轮。"),
-        ("Inference and fusion", "推理与融合", "Both branches run batched inference on the test set and write per-video softmax probabilities to .npz; a fusion script aligns them by video id and label map, combines them with a weight, and writes test_set_labels.csv.",
-         "两个分支在测试集上批量推理，把每个视频的 softmax 概率写入 .npz；融合脚本按视频 id 与标签映射对齐，加权合并后写出 test_set_labels.csv。"),
+        ("Inference and fusion", "推理与融合", "Both branches run batched inference on the test set and write per-video softmax probabilities to .npz; a fusion script aligns them by video id and label map, combines them as α·p_skeleton + (1−α)·p_rgb with α = 0.6, and writes test_set_labels.csv.",
+         "两个分支在测试集上批量推理，把每个视频的 softmax 概率写入 .npz；融合脚本按视频 id 与标签映射对齐，按 α·p_skeleton + (1−α)·p_rgb（α = 0.6）合并后写出 test_set_labels.csv。"),
     ])
     s += section("system", "The pipeline", "流水线", body, cls="alt")
 
@@ -596,7 +602,8 @@ def hri30():
         ("Models", "模型", "3D ResNet-18 fine-tuning; ST-GCN implemented from the adjacency up.", "3D ResNet-18 微调；从邻接矩阵开始实现 ST-GCN。"),
         ("Training and inference", "训练与推理", "Symmetric training loops with checkpoint and label-map saving; batched inference; fusion and submission tooling; documented, reproducible project layout.", "对称的训练循环与检查点/标签映射保存；批量推理；融合与提交工具；有文档、可复现的项目结构。"),
     ])
-    body += links([(CV + "HRI30_Poster.pdf", "Project poster (PDF)", "项目海报（PDF）"),
+    body += figure(IMG + "hri30-poster.jpg", "The project poster: motivation, the two branches, late fusion with α = 0.6, training curves and conclusions.", "项目海报：动机、两个分支、α = 0.6 的后期融合、训练曲线与结论。", wide=True)
+    body += links([(CV + "HRI30_Poster.pdf", "Poster (PDF)", "海报（PDF）"),
                    ("https://doi.org/10.1109/ICRA46639.2022.9811871", "HRI30 dataset paper (ICRA 2022)", "HRI30 数据集论文（ICRA 2022）")])
     s += section("results", "What the two streams taught me", "双流带来的结论", body)
     page("hri30", pr['title'][0], pr['title'][1],

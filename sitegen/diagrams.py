@@ -74,19 +74,19 @@ def vtla_architecture():
     d.arrow(366, 102, 394, 102)
     d.box(396, 52, 130, 100, ["ResNet-18", "load estimator"], ["ResNet-18", "力估计器"], ["MAE 0.33 N on", "unseen fabrics"], ["未见织物", "MAE 0.33 N"], fill='#fff', stroke=C['teal'])
     # Pipeline B (VLM) bottom-left
-    d.group(20, 190, 520, 150, "Pipeline B · released MLLM-Fabric data (trains and evaluates the VLM only)", "流水线 B · 公开 MLLM-Fabric 数据（只训练/评测 VLM）", fill=C['mag_bg'], color=C['mag'])
-    d.box(36, 222, 150, 100, ["3,937 train", "400 test prompts"], ["3,937 训练", "400 测试样本"], ["byte-verified prompt", "generator (8,734 / 8,734)"], ["逐字节校验的提示生成器", "（8,734 / 8,734）"])
+    d.group(20, 190, 520, 150, "Pipeline B · fabric-comparison data (trains and evaluates the VLM only)", "流水线 B · 织物比较数据（只训练/评测 VLM）", fill=C['mag_bg'], color=C['mag'])
+    d.box(36, 222, 150, 100, ["200 fabrics, 4 properties", "3,937 train / 400 test pairs"], ["200 种织物、4 种属性", "3,937 训练 / 400 测试对"], ["public MLLM-Fabric images;", "my prompt + image compositor"], ["公开 MLLM-Fabric 图像；", "自建提示与拼图流水线"])
     d.arrow(186, 272, 214, 272)
     d.box(216, 222, 150, 100, ["+ 4,000 adjacent-level", "pairs, 0 new labels"], ["+ 4,000 组相邻等级对", "零新增标注"], ["fabric-disjoint split,", "per-cell look-up ceiling"], ["织物不相交划分，", "逐单元查表上限"])
     d.arrow(366, 272, 394, 272)
-    d.box(396, 222, 130, 100, ["Qwen2.5-VL-7B", "+ QLoRA r=32"], ["Qwen2.5-VL-7B", "+ QLoRA r=32"], ["0.985 official /", "0.865 unseen fabrics"], ["官方协议 0.985 /", "未见织物 0.865"], fill='#fff', stroke=C['mag'])
+    d.box(396, 222, 130, 100, ["Qwen2.5-VL-7B", "+ QLoRA r=32"], ["Qwen2.5-VL-7B", "+ QLoRA r=32"], ["0.985 seen fabrics /", "0.865 unseen fabrics"], ["已见织物 0.985 /", "未见织物 0.865"], fill='#fff', stroke=C['mag'])
     d.label(280, 180, "no data cross this line before deployment", "部署之前两条流水线的数据互不交叉", italic=True)
     # Deployment chain right
     d.group(560, 20, 520, 480, "Deployment on the Franka arm · the two pipelines meet here", "Franka 真机部署 · 两条流水线在这里汇合", fill=C['navy_bg'], color=C['navy'])
     steps = [
         (["Press each hanging garment", "with the GelSight finger"], ["GelSight 指尖依次按压", "悬挂的每件衣物"], ["taught once by hand, replayed with a 20 ms hard stop", "示教一次后回放，20 ms 硬停保护"]),
         (["Estimate force per frame,", "select 4 frames at 0 / 13.5 / 16.8 / 19.9 N"], ["逐帧估计接触力，", "在 0 / 13.5 / 16.8 / 19.9 N 处选帧"], ["six selection gates; no force sensor in the loop", "六道筛选门；回路中没有力传感器"]),
-        (["Compose the prompt:", "RGB + 4 tactile frames per fabric"], ["组合提示：每件织物", "RGB + 4 帧触觉图像"], ["same byte-verified generator as Pipeline B", "与流水线 B 相同的逐字节校验生成器"]),
+        (["Compose the prompt:", "RGB + 4 tactile frames per fabric"], ["组合提示：每件织物", "RGB + 4 帧触觉图像"], ["same prompt generator as training", "与训练阶段相同的提示生成器"]),
         (["VLM answers 24 pairwise questions", "(6 pairs × 4 properties)"], ["VLM 回答 24 组成对比较", "（6 对 × 4 种属性）"], ["softness · thickness · elasticity · texture, both orders", "柔软度·厚度·弹性·纹理，正反两序"]),
         (["Rank 4 garments, recommend one", "with reliability warnings"], ["对 4 件衣物排序并给出推荐", "附带可靠性提示"], ["“suitable for summer” → F4", "“适合夏天穿” → F4"]),
         (["Grasp a single fabric layer", "and place it in the basket"], ["夹住单层织物", "放入篮筐"], ["same end-effector, no tool change", "同一末端执行器，无需换工具"]),
@@ -160,7 +160,7 @@ def hri30_arch():
     # fusion
     d.arrow(832, 110, 878, 190)
     d.arrow(832, 310, 878, 230)
-    d.box(880, 150, 200, 110, ["Weighted late fusion"], ["加权后期融合"], ["p = w·p_rgb + (1−w)·p_skel", "aligned by video id + label map", "→ test_set_labels.csv"], ["p = w·p_rgb + (1−w)·p_skel", "按视频 id 与类别映射对齐", "→ test_set_labels.csv"], size=13, sub_size=10, stroke=C['navy'])
+    d.box(880, 150, 200, 110, ["Weighted late fusion"], ["加权后期融合"], ["p = α·p_skel + (1−α)·p_rgb, α = 0.6", "aligned by video id + label map", "→ test_set_labels.csv"], ["p = α·p_skel + (1−α)·p_rgb，α = 0.6", "按视频 id 与类别映射对齐", "→ test_set_labels.csv"], size=13, sub_size=10, stroke=C['navy'])
     d.label(980, 290, "71.15% on the test set", "测试集准确率 71.15%", size=13, fill=C['navy'])
     return d.svg("Dual-stream action recognition architecture", "双流动作识别架构")
 

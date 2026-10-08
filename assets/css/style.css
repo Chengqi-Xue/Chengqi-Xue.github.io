@@ -259,3 +259,21 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .fig.mid{max-width:52rem}
 .fig.plain{overflow-x:auto;-webkit-overflow-scrolling:touch}
 @media (max-width:760px){.diagram{min-width:860px}}
+/* revisions */
+.steps li{grid-template-columns:2.6rem 1fr;grid-template-rows:auto auto}
+.steps li::before{grid-row:1/3}
+.step-b{grid-column:2}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(1.5rem,4vw,4rem);align-items:center}
+.hero-photo{position:relative}
+.hero-photo img.portrait-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+.hero-badge{display:flex;align-items:center;gap:.9rem;margin-top:1rem;background:rgba(245,247,246,.08);border:1px solid rgba(245,247,246,.18);border-radius:10px;padding:.7rem .9rem}
+.hero-badge img{height:3.2rem;width:auto;border-radius:4px;background:#fff;padding:.15rem}
+.hero-badge .t1{font-weight:600}
+.hero-badge .t2{font-size:.88rem;color:rgba(245,247,246,.7)}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr}.hero-photo{order:-1}.hero-photo img.portrait-img{aspect-ratio:16/10}}
+.fig.square{max-width:34rem}
+.about-logos{display:flex;gap:1rem;align-items:center;margin:1rem 0 1.5rem}
+.about-logos img{height:3rem;width:auto}
+.phero-media .hero-side{color:rgba(245,247,246,.88);padding-top:.5rem}
+.phero-media .hero-side h3{color:#fff;margin-top:.4rem}
+.phero-media .hero-side p{color:rgba(245,247,246,.82)}

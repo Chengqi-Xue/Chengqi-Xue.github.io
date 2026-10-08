@@ -101,7 +101,7 @@ def about():
 <div class="links"><a class="btn" href="mailto:{EMAIL}">{t("Email me", "给我发邮件")}</a><a class="btn ghost" href="assets/cv/Chengqi_Xue_CV_EN.pdf" target="_blank" rel="noopener">{t("CV (English)", "英文简历")}</a><a class="btn ghost" href="assets/cv/Chengqi_Xue_CV_ZH.pdf" target="_blank" rel="noopener">{t("CV (Chinese)", "中文简历")}</a></div>
 '''
     right = f'''
-<figure class="portrait fig mt0"><img src="assets/img/portrait.jpg" alt="Chengqi Xue at the Franka workstation in the KCL robotics lab"><figcaption>{t("At the Franka workstation, KCL robotics lab, 2026.", "2026 年，KCL 机器人实验室 Franka 工位。")}</figcaption></figure>
+<div class="about-logos"><img src="assets/img/kcl-logo.png" alt="King’s College London"></div>
 {h(3, "Education", "教育背景")}
 <ul class="timeline">
 <li><span class="when">2025.09 – 2026.09</span><div class="what">{t("MSc Robotics, King’s College London", "伦敦国王学院 · 机器人工程硕士（MSc Robotics）")}</div><div class="small">{t("Robot dynamics and control, kinematics and motion planning, sensing and perception, machine learning, intelligence and autonomy. Supervised by Prof. Shan Luo.", "机器人动力学与控制、运动学与运动规划、感知与传感、机器学习、智能与自主系统。导师：罗山教授。")}</div></li>
@@ -136,6 +136,8 @@ def hero():
     return f'''<section class="hero" id="top">
 <canvas id="gel" aria-hidden="true"></canvas>
 <div class="wrap">
+<div class="hero-grid">
+<div>
 <h1 class="hero-name"><span class="zh">薛程琪</span><span class="en">Chengqi<br>Xue</span><small><span class="en">薛程琪 · MSc Robotics, King’s College London</span><span class="zh">Chengqi Xue · 伦敦国王学院 机器人工程硕士</span></small></h1>
 <p class="hero-role en">I build robots that see, touch and reason—and I take them from algorithm to real hardware.</p>
 <p class="hero-role zh">让机器人会看、会摸、会推理，并把算法真正落到真机上。</p>
@@ -143,6 +145,12 @@ def hero():
 <li>{t("Embodied intelligence", "具身智能")}</li><li>{t("Vision–language–action models", "视觉-语言-动作模型")}</li><li>{t("Tactile sensing", "触觉感知")}</li><li>{t("Robot manipulation", "机器人操作")}</li>
 </ul>
 <div class="hero-cta"><a class="btn" href="#research">{t("See the research", "查看研究项目")}</a><a class="btn ghost" href="#about">{t("About me", "关于我")}</a></div>
+</div>
+<div class="hero-photo">
+<img class="portrait-img" src="assets/img/portrait.jpg" alt="Chengqi Xue at the Franka workstation in the KCL robotics lab">
+<div class="hero-badge"><img src="assets/img/kcl-logo.png" alt="King’s College London"><div><div class="t1">{t("King’s College London", "伦敦国王学院 King’s College London")}</div><div class="t2">{t("MSc Robotics · Robotics lab, Franka workstation, 2026", "机器人工程硕士 · 机器人实验室 Franka 工位，2026")}</div></div></div>
+</div>
+</div>
 </div>
 <div class="hero-hint">{t("The dots are a tactile marker field—move the pointer to press it.", "背景是触觉传感器的标记点阵，移动鼠标即可“按压”。")}</div>
 </section>
@@ -171,14 +179,12 @@ def build():
                 root="", page_class="dark-top home")
     body += header(root="", active="")
     body += hero()
-    body += section("thesis", "", "", thesis(), cls="").replace('<div class="sec-head"><h2><span class="en"></span><span class="zh"></span></h2></div>', '')
-    body += section("research", "Research", "研究项目", research(),
-                    "Seven projects, grouped by where they happened. Each page tells the whole story: the problem, the hardware, the method, the numbers, and what I built with my own hands.",
-                    "七个项目，按发生的地点分组。每个项目页面都讲完整的故事：问题、硬件、方法、数据，以及我亲手做的部分。", cls="alt")
+    body += section("about", "About", "关于我", about(), cls="")
+    body += section("thesis", "", "", thesis(), cls="alt").replace('<div class="sec-head"><h2><span class="en"></span><span class="zh"></span></h2></div>', '')
+    body += section("research", "Research", "研究项目", research())
     body += section("publications", "Publications and patents", "论文与专利", publications(),
-                    "Four SCI Q1 journal papers, two SPIE conference papers, and four patents from the undergraduate research years.",
-                    "本科科研阶段发表 4 篇 SCI Q1 期刊论文、2 篇 SPIE 国际会议论文，获得 4 项专利。")
-    body += section("about", "About", "关于我", about(), cls="alt")
+                    "Four SCI Q1 journal papers, two SPIE conference papers, and four patents.",
+                    "4 篇 SCI Q1 期刊论文、2 篇 SPIE 国际会议论文、4 项专利。", cls="alt")
     body += footer(root="")
     open('../index.html', 'w', encoding='utf-8').write(body)
     print("home ok")
