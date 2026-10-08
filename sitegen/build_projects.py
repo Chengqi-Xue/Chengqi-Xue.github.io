@@ -295,11 +295,12 @@ def tiago():
                        "The simulated ward in Webots with the live map and planner view: TIAGo maps the ward, localises, receives a patient goal and navigates around furniture and people to a stand-off position.",
                        "Webots 中的仿真病房与实时地图/规划视图：TIAGo 建图、定位，接收患者目标后绕过家具与行人，导航到停靠位置。", wide=True)
     s = ''
-    s += section("why", "The problem on the ward", "病房里的问题", prose(
+    s += section("why", "The problem on the ward", "病房里的问题", two_col(prose(
         ("Chemotherapy patients sit for hours and often need small things—water, a blanket, a question answered. Each request is simple, but together they interrupt nurses all day. After a site visit to St Thomas’ Hospital and discussions with nursing staff, we scoped a socially assistive robot that handles these low-acuity requests, stays within clear safety boundaries, and defers anything clinical to staff.",
          "化疗患者要在座椅上待几个小时，经常需要一些小事——倒水、拿毯子、问个问题。每个请求都很简单，但加在一起会一整天打断护士的工作。我们实地走访了 St Thomas’ 医院并与护理人员交流后，确定了项目范围：一个处理这类低急迫度请求的社交辅助机器人，在明确的安全边界内工作，任何临床事务都交还给医护人员。"),
         ("The ward layout we built reflects what we saw: a central corridor, treatment bays on both sides with chairs and IV stands, a nurse station and a waiting area. That layout drove every design decision—the corridor is the default traversal zone, the bays need conservative short-range control, and a request can come from either side, so gestures must be detected across bilateral viewing angles.",
-         "我们搭建的病房布局来自现场观察：中央走廊、两侧带座椅和输液架的治疗区、护士站和候诊区。这个布局决定了所有设计——走廊是默认通行区，治疗区需要保守的近距离控制，求助可能来自两侧，所以手势检测必须覆盖双侧视角。")))
+         "我们搭建的病房布局来自现场观察：中央走廊、两侧带座椅和输液架的治疗区、护士站和候诊区。这个布局决定了所有设计——走廊是默认通行区，治疗区需要保守的近距离控制，求助可能来自两侧，所以手势检测必须覆盖双侧视角。")),
+        figure(IMG + "tiago-poster-day.jpg", "Poster day with the team and our supervisor, King’s College London, 2026.", "海报日：与团队和导师合影，伦敦国王学院，2026。")))
     body = figure(IMG + "tiago-system-flow.jpg", "System architecture: the staged multimodal perception pipeline (audio trigger → visual confirmation → target localisation) feeding navigation goal generation and the bounded navigate-and-attend interaction.",
                   "系统架构：分阶段的多模态感知流水线（音频触发 → 视觉确认 → 目标定位）生成导航目标，进入“导航-到位陪伴”的受限交互模式。", cls="narrow")
     body += diagram_fig("tiago", "The runtime pipeline in one view. Perception is staged so background speech alone never triggers a move; navigation is the standard Nav2 layering with an inflation margin that is as much social as geometric.",
@@ -348,7 +349,6 @@ def tiago():
     body += links([(CV + "TIAGo_Group_Project_Report.pdf", "Group project portfolio (PDF)", "小组项目报告（PDF）"),
                    ("https://github.com/Lixiangqi2002/hunavsim_docker", "HuNavSim Docker (simulation base)", "HuNavSim Docker（仿真基础）"),
                    ("https://cyberbotics.com/doc/guide/tutorials", "Webots documentation", "Webots 文档")])
-    body += figure(IMG + "tiago-poster-day.jpg", "Poster day with the team and our supervisor, King’s College London, 2026.", "海报日：与团队和导师合影，伦敦国王学院，2026。", cls="mid")
     body += f'<div class="gallery g2" style="max-width:30rem"><figure class="fig"><img src="{IMG}logo-gstt.jpg" alt="Guy’s and St Thomas’ NHS Foundation Trust" loading="lazy"></figure><figure class="fig"><img src="{IMG}logo-pal.jpg" alt="PAL Robotics" loading="lazy"></figure></div>'
     s += section("results", "Results", "结果", body, cls="alt")
     page("tiago", pr['title'][0], pr['title'][1],
