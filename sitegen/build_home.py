@@ -115,7 +115,7 @@ def about():
 </ul>
 '''
     awards = f'''
-{h(3, "Honours and awards", "荣誉奖项")}
+<div class="cols c21"><div>{h(3, "Honours and awards", "荣誉奖项")}
 <ul class="awards">
 <li><span class="when">2024.09</span>{t("Best Researcher Award, International Research Awards on Sensing Technology", "最佳研究员奖（Best Researcher Award），国际传感技术研究奖")}</li>
 <li><span class="when">2023.12</span>{t("National Scholarship (top 4%), Yangtze University", "国家奖学金（前 4%），长江大学")}</li>
@@ -123,6 +123,7 @@ def about():
 <li><span class="when">2023.09</span>{t("First Prize (national), College Students AI Technology Competition", "全国大学生 AI 科技竞赛一等奖")}</li>
 <li><span class="when">2022.07</span>{t("Second Prize, College Students “Internet+” Innovation and Entrepreneurship Competition", "大学生“互联网+”创新创业大赛二等奖")}</li>
 </ul>
+</div><figure class="fig mt0"><img src="assets/img/award-best-researcher.jpg" alt="Best Researcher Award certificate, International Research Awards on Sensing Technology, 2024" loading="lazy" data-zoom><figcaption>{t("Best Researcher Award certificate, 24th International Research Awards on Sensing Technology, September 2024.", "最佳研究员奖证书，第 24 届国际传感技术研究奖，2024 年 9 月。")}</figcaption></figure></div>
 <div class="photos">
 <figure><img src="assets/img/event-uk-ai-agent.jpg" alt="UK AI Agent Hackathon team photo" loading="lazy" data-zoom><figcaption>{t("UK AI Agent Hackathon, London, 2026.", "UK AI Agent Hackathon（英国 AI 智能体黑客松），伦敦，2026。")}</figcaption></figure>
 <figure><img src="assets/img/event-ai-ningbo.jpg" alt="AI Ningbo Challenge Europe promotion event" loading="lazy" data-zoom><figcaption>{t("The 2nd “AI Ningbo” Challenge: Empowering Industries with AI, European-region launch, 2026.", "第二届“AI 宁波”人工智能赋能产业大赛（欧洲赛区）推介会，2026。")}</figcaption></figure>

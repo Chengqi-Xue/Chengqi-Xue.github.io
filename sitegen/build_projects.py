@@ -210,6 +210,8 @@ def umi():
          "难点不在传感器本身，而在于让它们一起可信。四路数据流、四个时钟、四个坐标系必须合成一条机器人可用的时间线，每一个变换在使用前都要先测出来。我们把标定和数据质量当作学习系统的一部分，而不是看不见的前置工作——每条示教从采集、对齐、筛选到部署都可以被检视。"),
         ("Then the corpus split into two policy branches. My lab mate trained a tactile-conditioned Diffusion Policy; I converted the same demonstrations to LeRobot format and fine-tuned π0.5, a vision-language-action model, and deployed it on the FR3. This page covers the π0.5 branch.",
          "随后数据被用于两条策略分支：实验室同学训练了触觉条件化的 Diffusion Policy；我把同一批示教转换成 LeRobot 格式，微调视觉-语言-动作模型 π0.5，并部署到 FR3 上。这一页介绍 π0.5 这一分支。")))
+    s = s.replace('</div></section>', callout("Design reference: Universal Manipulation Interface — Cheng Chi, Zhenjia Xu, Chuer Pan, Eric Cousineau, Benjamin Burchfiel, Siyuan Feng, Russ Tedrake, Shuran Song. <em>In-The-Wild Robot Teaching Without In-The-Wild Robots</em>, Robotics: Science and Systems (RSS) 2024. We followed its hand-held gripper and camera-relative action formulation, and added tactile sensing, Quest tracking and the calibration ledger on top. <a href=\"https://arxiv.org/abs/2402.10329\" target=\"_blank\" rel=\"noopener\">arXiv 2402.10329</a> · <a href=\"https://umi-gripper.github.io\" target=\"_blank\" rel=\"noopener\">umi-gripper.github.io</a>",
+        "设计参考：Universal Manipulation Interface —— Cheng Chi、Zhenjia Xu、Chuer Pan、Eric Cousineau、Benjamin Burchfiel、Siyuan Feng、Russ Tedrake、Shuran Song，《In-The-Wild Robot Teaching Without In-The-Wild Robots》，RSS 2024。我们沿用了它的手持夹爪与相机相对动作的表述方式，在此之上加入触觉感知、Quest 追踪和标定账本。<a href=\"https://arxiv.org/abs/2402.10329\" target=\"_blank\" rel=\"noopener\">arXiv 2402.10329</a> · <a href=\"https://umi-gripper.github.io\" target=\"_blank\" rel=\"noopener\">umi-gripper.github.io</a>") + '</div></section>', 1)
 
     body = figure(IMG + "umi-workflow.jpg", "End-to-end workflow: system setup and calibration → collection and curation → representation and policy learning. Each stage produces a traceable artifact; geometry, timing and data quality are closed before training.",
                   "端到端工作流：系统搭建与标定 → 采集与筛选 → 表示与策略学习。每个阶段都产出可追溯的产物；几何、时序与数据质量在训练前全部闭环。", wide=True, cls="plain")
@@ -268,7 +270,8 @@ def umi():
         ("Data", "数据", "Collection sessions, episode audit, promotion of accepted episodes to the clean dataset.", "采集会话、示教审计、合格示教提升到干净数据集。"),
         ("π0.5 policy", "π0.5 策略", "LeRobot conversion, openpi fine-tuning, inference server and FR3 deployment, live-scored rollouts.", "LeRobot 转换、openpi 微调、推理服务器与 FR3 部署、实时计分回放。"),
     ])
-    body += links([("https://github.com/SuhangXia/tactile-umi", "Tactile UMI repository", "Tactile UMI 代码仓库"),
+    body += links([("https://arxiv.org/abs/2402.10329", "UMI paper (Chi et al., RSS 2024)", "UMI 论文（Chi 等，RSS 2024）"),
+                   ("https://github.com/SuhangXia/tactile-umi", "Tactile UMI repository", "Tactile UMI 代码仓库"),
                    ("https://arxiv.org/abs/2602.01153", "UniForce on arXiv", "UniForce 论文（arXiv）"),
                    ("https://www.physicalintelligence.company/blog/pi05", "π0.5 by Physical Intelligence", "π0.5（Physical Intelligence）")])
     body += callout("The Tactile UMI system and corpus are joint work with Suhang Xia; the UniForce tactile representation was developed under the guidance of Zhuo Chen. The π0.5 fine-tuning and FR3 deployment described here are my branch.",
