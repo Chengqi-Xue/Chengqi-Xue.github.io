@@ -365,7 +365,7 @@ def tiago():
 def thread():
     pr = PROJECTS[3]
     hero = project_hero(pr['kind'], *pr['title'], *pr['q'], [
-        ("Role", "角色", "Research assistant; co-first author of the PLOS ONE system paper; corresponding author of two SPIE reviews; co-inventor on two patents", "科研助理；PLOS ONE 系统论文共同一作；两篇 SPIE 综述通讯作者；两项专利共同发明人"),
+        ("Role", "角色", "Research assistant; author on two SCI Q1 papers, corresponding author of two SPIE reviews, co-inventor on two patents", "科研助理；两篇 SCI Q1 论文作者，两篇 SPIE 综述通讯作者，两项专利共同发明人"),
         ("Period", "时间", "March 2022 – July 2025", "2022 年 3 月 – 2025 年 7 月"),
         ("Where", "单位", "Yangtze University, with Prof. Gengpei Zhang’s group", "长江大学，张耕培教授课题组"),
         ("Stack", "技术栈", "Raspberry Pi, six fisheye cameras, LED strip lighting, stepper and robot-arm carriers; OpenCV, SIFT + RANSAC, Laplacian pyramids; StyleGAN2 / DFMGAN; YOLOv5 / v8, SSD", "树莓派、六目鱼眼相机、LED 条形光源、步进滑台与机械臂载体；OpenCV、SIFT + RANSAC、拉普拉斯金字塔；StyleGAN2 / DFMGAN；YOLOv5 / v8、SSD"),
@@ -430,7 +430,7 @@ def thread():
         ("Imaging hardware", "成像硬件", "Camera ring geometry, strip lighting and diffuser, Raspberry Pi control of cameras, lighting and the stepper carrier.", "相机环几何、条形光源与柔光罩，树莓派对相机、光源与步进载体的控制。"),
         ("Classical vision", "传统视觉", "Fisheye calibration and undistortion, denoising and Retinex benchmarks, cylindrical-model stitching.", "鱼眼标定与畸变校正、去噪与 Retinex 对比、柱面模型拼接。"),
         ("Learning", "学习方法", "Dataset annotation; SSD / YOLOv5 / YOLOv8 comparison; DFMGAN training and the external-thread validation design.", "数据集标注；SSD / YOLOv5 / YOLOv8 对比；DFMGAN 训练与外螺纹验证方案。"),
-        ("Writing and IP", "写作与知识产权", "Co-first author (PLOS ONE), co-author (Sensors), corresponding author on two SPIE reviews, two patent applications.", "共同一作（PLOS ONE）、合著（Sensors）、两篇 SPIE 综述通讯作者、两项专利申请。"),
+        ("Writing and IP", "写作与知识产权", "PLOS ONE and Sensors papers, corresponding author on two SPIE reviews, two patent applications.", "PLOS ONE 与 Sensors 论文、两篇 SPIE 综述通讯作者、两项专利申请。"),
     ])
     body += links([("https://doi.org/10.1371/journal.pone.0304224", "PLOS ONE: Internal thread defect detection system based on multi-vision", "PLOS ONE：基于多视觉的内螺纹缺陷检测系统"),
                    ("https://doi.org/10.3390/s24175636", "Sensors: Defect generation and detection with GANs and YOLO", "Sensors：基于 GAN 与 YOLO 的缺陷生成与检测"),
@@ -448,7 +448,7 @@ def thread():
 def gfrp():
     pr = PROJECTS[4]
     hero = project_hero(pr['kind'], *pr['title'], *pr['q'], [
-        ("Role", "角色", "Research assistant; co-first author of both PLOS ONE papers", "科研助理；两篇 PLOS ONE 论文共同一作"),
+        ("Role", "角色", "Research assistant; author on both PLOS ONE papers", "科研助理；两篇 PLOS ONE 论文作者"),
         ("Period", "时间", "March 2021 – July 2025", "2021 年 3 月 – 2025 年 7 月"),
         ("Where", "单位", "Yangtze University", "长江大学"),
         ("Stack", "技术栈", "Python, scikit-learn, PyTorch; SVR / GPR / RBFNN baselines; genetic-algorithm augmentation; Reptile meta-learning; TPOT AutoML, SVM, MLP, Bagging, Random Forest", "Python、scikit-learn、PyTorch；SVR / GPR / RBFNN 基线；遗传算法数据增广；Reptile 元学习；TPOT AutoML、SVM、MLP、Bagging、随机森林"),
@@ -495,7 +495,7 @@ def gfrp():
         ("Data", "数据", "Collected and normalised the test data from the literature; defined the five physical inputs.", "从文献收集并归一化试验数据；定义五个物理输入。"),
         ("Augmentation + meta-learning", "增广 + 元学习", "Genetic augmentation with three-model fitness; Reptile pre-training and fine-tuning; the 100-run evaluation protocol.", "三模型适应度的遗传增广；Reptile 预训练与微调；100 次重复的评测方案。"),
         ("AutoML benchmark", "AutoML 对比", "TPOT, SVM, MLP, Bagging and RF comparison on two column families; sensitivity sweeps that produced the design rules.", "两类柱上的 TPOT、SVM、MLP、Bagging、RF 对比；得出设计规律的灵敏度扫描。"),
-        ("Writing", "写作", "Co-first author on both PLOS ONE papers.", "两篇 PLOS ONE 论文共同一作。"),
+        ("Writing", "写作", "Both PLOS ONE papers.", "两篇 PLOS ONE 论文。"),
     ])
     body += links([("https://doi.org/10.1371/journal.pone.0305038", "PLOS ONE: Small-sample deep meta-learning for GFRP columns", "PLOS ONE：GFRP 柱的小样本深度元学习"),
                    ("https://doi.org/10.1371/journal.pone.0301865", "PLOS ONE: Design optimisation with machine learning", "PLOS ONE：基于机器学习的设计优化")])

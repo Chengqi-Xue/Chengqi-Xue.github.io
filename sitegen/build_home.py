@@ -40,15 +40,15 @@ PUBS = [
     ("PLOS ONE", "2024",
      "Data modeling analysis of GFRP tubular filled concrete column based on small sample deep meta learning method",
      "基于小样本深度元学习方法的 GFRP 管混凝土柱数据建模分析",
-     "T. Deng, <b>C. Xue</b> (co-first author), G. Zhang", "https://doi.org/10.1371/journal.pone.0305038", "gfrp-ml"),
+     "T. Deng, <b>C. Xue</b>, G. Zhang", "https://doi.org/10.1371/journal.pone.0305038", "gfrp-ml"),
     ("PLOS ONE", "2024",
      "Internal thread defect detection system based on multi-vision",
      "基于多视觉的内螺纹缺陷检测系统",
-     "X. Dou, <b>C. Xue</b> (co-first author), G. Zhang, Z. Jiang", "https://doi.org/10.1371/journal.pone.0304224", "thread-inspection"),
+     "X. Dou, <b>C. Xue</b>, G. Zhang, Z. Jiang", "https://doi.org/10.1371/journal.pone.0304224", "thread-inspection"),
     ("PLOS ONE", "2024",
      "Study on design optimization of GFRP tubular column composite structure based on machine learning method",
      "基于机器学习方法的 GFRP 管柱复合结构设计优化研究",
-     "P. Shu, <b>C. Xue</b> (co-first author), G. Zhang, T. Deng", "https://doi.org/10.1371/journal.pone.0301865", "gfrp-ml"),
+     "P. Shu, <b>C. Xue</b>, G. Zhang, T. Deng", "https://doi.org/10.1371/journal.pone.0301865", "gfrp-ml"),
     ("Sensors", "2024",
      "Internal thread defect generation algorithm and detection system based on generative adversarial networks and You Only Look Once",
      "基于生成对抗网络与 YOLO 的内螺纹缺陷生成算法与检测系统",
@@ -80,7 +80,7 @@ def publications():
     for venue, year, te, tz, auth, doi, slug in PUBS:
         link = f'<a href="{doi}" target="_blank" rel="noopener">{doi.replace("https://", "").replace("http://", "")}</a>' if doi else t("Under review", "审稿中")
         proj = f' · <a href="projects/{slug}.html">{t("Project page", "项目页面")}</a>' if slug else ''
-        out.append(f'<li class="pub"><div class="pub-venue">{venue}<br>{year}</div><div><div class="pub-t">{t(te, tz)}</div><div class="pub-a">{auth}</div><div class="pub-l">{link}{proj}</div></div></li>')
+        out.append(f'<li class="pub"><div class="pub-venue">{venue}<br>{year}</div><div><div class="pub-t">{te}</div><div class="pub-a">{auth}</div><div class="pub-l">{link}{proj}</div></div></li>')
     out.append('</ul>')
     out.append(h(3, "Patents", "专利"))
     out.append('<div class="patents">')
@@ -166,9 +166,9 @@ def thesis():
    "我的工作处在感知与动作的交界处：把视觉触觉传感器与多模态大模型结合，让机器人判断那些看不见的属性；同时我同样在意评测协议、标定记录和部署路径，而不只是一个好看的指标。")}
 </div>
 <div class="facts">
-<div><div class="fact-v">4</div><div class="fact-l">{t("SCI Q1 journal papers (3 as co-first author)", "SCI Q1 期刊论文（3 篇共同一作）")}</div></div>
+<div><div class="fact-v">4 + 2</div><div class="fact-l">{t("SCI Q1 journal papers + SPIE conference papers", "篇 SCI Q1 期刊论文 + 2 篇 SPIE 会议论文")}</div></div>
 <div><div class="fact-v">4</div><div class="fact-l">{t("patents (2 as first inventor)", "项专利（2 项第一发明人）")}</div></div>
-<div><div class="fact-v">2</div><div class="fact-l">{t("real-robot VLA deployments on Franka arms", "次 Franka 机械臂真机 VLA 部署")}</div></div>
+<div><div class="fact-v">3</div><div class="fact-l">{t("robot platforms, from simulation to real hardware: Franka, FR3, TIAGo", "个机器人平台，从仿真到真机：Franka、FR3、TIAGo")}</div></div>
 <div><div class="fact-v">0.33 N</div><div class="fact-l">{t("force-estimation error from a tactile image alone, on unseen fabrics", "仅凭触觉图像估计接触力的误差（未见织物）")}</div></div>
 </div>
 </div>'''
