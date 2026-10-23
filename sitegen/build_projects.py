@@ -171,7 +171,6 @@ def vtla():
         ("Evaluation", "评测", "Prompt and image pipeline, calibrated parser, fp32 forced choice, unseen-fabric split with per-cell ceilings, perturbation probes.", "提示与拼图流水线、标定解析器、fp32 强制选择、带逐单元上限的未见织物划分、扰动探针。"),
         ("Deployment", "部署", "Teach-and-replay with hard stops, gated slot selection, hash-linked provenance from press to recommendation.", "带硬停的示教回放、门控槽位选择、从按压到推荐的哈希链路溯源。"),
     ])
-    body += links([(CV + "VTLA_Report_Chengqi_Xue.pdf", "Read the dissertation (PDF)", "阅读毕业论文（PDF）")])
     body += callout("Scope: all VLM runs use a single seed, and the four-garment demonstration is an integration test of the full loop rather than an accuracy measurement, since the garments have no independent property labels.",
                     "说明：所有 VLM 实验使用单一随机种子；四件衣物的演示是对完整闭环的集成测试，而非准确率测量，因为这些衣物没有独立的属性标签。")
     s += section("contrib", "My contribution", "我做的部分", body)
@@ -280,6 +279,10 @@ def umi():
 </tbody></table>'''
     body += prose(("The review side pairs these rules with tools: a synchronised timeline with sensor views and 3D replay for failure inspection; gripper recovery that re-detects the ArUco marker and writes a calibrated width back to H5 with a backup; contact diagnostics with left/right contact scores and tactile-window coverage; and curation outputs—reason logs, valid segments, filtered exports and a quarantine preview. Any step that changes data (gripper repair, ArUco masking, quarantine) snapshots its sources first.",
                    "审查侧把这些规则和工具配在一起：带传感器视图与 3D 回放的同步时间线用于排查失败；夹爪恢复功能重新检测 ArUco 标记并把标定后的开度写回 H5（先备份）；接触诊断给出左右指接触分数与触觉窗口覆盖率；筛选输出包括原因日志、有效片段、过滤后的导出与隔离预览。任何会改动数据的步骤（夹爪修复、ArUco 遮挡、隔离）都先对源文件做快照。"),)
+    body += figure(IMG + "umi-audit-dashboard.jpg",
+                   "The audit dashboard on the 23 June collection session (145 episodes, 82,327 frames). The left panel runs the audit and gripper-repair jobs; the top strip shows the live job logs; the cards summarise the result—79,862 candidate samples, 100% raw and training feasibility with IK checks skipped, 655 gripper frames flagged for marker repair, and a 35.8% contact ratio with 37.8% of frames inside a valid tactile window. Episodes are kept or excluded from the list below and can be opened in Rerun.",
+                   "6 月 23 日采集会话的审计面板（145 条示教，82,327 帧）。左栏运行审计与夹爪修复任务，顶部是实时任务日志，卡片汇总结果——79,862 个候选样本，跳过 IK 检查时原始与训练可行性均为 100%，655 个夹爪帧被标记需做标记点修复，接触比例 35.8%，37.8% 的帧位于有效触觉窗口内。示教在下方列表中保留或剔除，并可在 Rerun 中打开。",
+                   wide=True, cls="plain")
     body += h(3, "What the timing checks found", "时序检查的结果")
     body += prose(("A read-only pass over the 223 raw episodes found no duplicate or backward host timestamps; the export holds 222 episodes and 135,952 policy steps, and no tactile window reaches outside its episode. Because tactile cameras run slower than the policy step, six-frame tactile windows reuse source frames 15.9% of the time on the left finger and 38.2% on the right, and the latest frame in a window can be up to 90.2 ms (left) or 178.2 ms (right) old. These numbers describe the data as it is; the receive timestamps do not record preprocessing completion or policy decision deadlines, which is a stated limitation.",
                    "对 223 条原始示教的只读检查没有发现重复或倒退的主机时间戳；导出结果包含 222 条示教、135,952 个策略步，没有任何触觉窗口越出所属示教。由于触觉相机帧率低于策略步长，六帧触觉窗口在左指有 15.9%、右指有 38.2% 的时间复用了源帧，窗口中最新一帧的映射年龄最大分别为 90.2 ms（左）和 178.2 ms（右）。这些数字描述的是数据本身的状态；接收时间戳并不记录预处理完成时刻或策略决策截止时刻，这是明确写出的局限。"),)
@@ -321,14 +324,12 @@ def umi():
         ("π0.5 policy", "π0.5 策略", "LeRobot conversion, openpi fine-tuning, inference server and FR3 deployment, live-scored rollouts.", "LeRobot 转换、openpi 微调、推理服务器与 FR3 部署、实时计分回放。"),
     ])
     body += links([("https://arxiv.org/abs/2402.10329", "UMI paper (Chi et al., RSS 2024)", "UMI 论文（Chi 等，RSS 2024）"),
-                   ("https://github.com/SuhangXia/tactile-umi", "Tactile UMI repository", "Tactile UMI 代码仓库"),
-                   ("https://suhangxia.github.io/research/tactile-umi/", "Tactile UMI project page (Suhang Xia)", "Tactile UMI 项目页（夏苏杭）"),
                    ("https://suhangxia.github.io/demo/robotdata-studio/?dataset=tactile-umi", "Browse the dataset in RobotData Studio", "在 RobotData Studio 中浏览数据集"),
                    ("https://arxiv.org/abs/2602.01153", "UniForce on arXiv", "UniForce 论文（arXiv）"),
                    ("https://arxiv.org/abs/2509.14688", "exUMI (latency-alignment method)", "exUMI（时延对齐方法）"),
                    ("https://www.physicalintelligence.company/blog/pi05", "π0.5 by Physical Intelligence", "π0.5（Physical Intelligence）")])
-    body += callout("The Tactile UMI system and corpus are joint work with Suhang Xia, who also built the Diffusion Policy branch, its controlled evaluation and the RobotData Studio workspace; the UniForce tactile representation was developed under the guidance of Zhuo Chen. The π0.5 fine-tuning and FR3 deployment described here are my branch.",
-                    "Tactile UMI 系统与数据集是与夏苏杭的共同工作，Diffusion Policy 分支、其受控评估以及 RobotData Studio 数据工作台也由他完成；UniForce 触觉表示在陈卓指导下完成。本页描述的 π0.5 微调与 FR3 部署是我负责的分支。")
+    body += callout("The Tactile UMI system and corpus are joint work with Suhang Xia, who built the Diffusion Policy branch; the UniForce tactile representation was developed under the guidance of Zhuo Chen. The π0.5 fine-tuning and FR3 deployment described here are my branch.",
+                    "Tactile UMI 系统与数据集是与夏苏杭的共同工作，Diffusion Policy 分支由他完成；UniForce 触觉表示在陈卓指导下完成。本页描述的 π0.5 微调与 FR3 部署是我负责的分支。")
     s += section("pi05", "Fine-tuning π0.5 on the corpus", "在语料上微调 π0.5", body)
 
     page("tactile-umi", pr['title'][0], pr['title'][1],
