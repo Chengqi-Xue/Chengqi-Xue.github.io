@@ -97,10 +97,13 @@ def head(title_en, title_zh, desc_en, root="", page_class=""):
 <meta property="og:description" content="{_html.escape(desc_en)}">
 <meta property="og:image" content="https://chengqi-xue.github.io/assets/img/vtla-setup-overview.jpg">
 <link rel="icon" href="{root}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="{root}assets/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{root}assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{root}assets/css/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}assets/css/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap"></noscript>
 <script>(function(){{try{{var l=localStorage.getItem('lang');if(!l){{l=(navigator.language||'').toLowerCase().startsWith('zh')?'zh':'en';}}document.documentElement.setAttribute('data-lang',l);document.documentElement.lang=l==='zh'?'zh-CN':'en';}}catch(e){{}}}})();</script>
 </head>
 <body class="{page_class}">
@@ -118,7 +121,7 @@ def header(root="", active=""):
 {nav("index.html#research", "Research", "研究项目", "research")}
 {nav("index.html#publications", "Publications", "论文与专利", "publications")}
 {nav("index.html#about", "About", "关于我", "about")}
-<a href="{root}assets/cv/Chengqi_Xue_CV_EN.pdf" class="en" target="_blank" rel="noopener">CV</a><a href="{root}assets/cv/Chengqi_Xue_CV_ZH.pdf" class="zh" target="_blank" rel="noopener">简历</a>
+<a href="{root}assets/cv/Chengqi_Xue_CV_2026.pdf" target="_blank" rel="noopener">{t("CV", "简历")}</a>
 <button class="lang" type="button" id="langToggle" aria-label="Switch language"><span class="en">中文</span><span class="zh">English</span></button>
 </nav>
 <button class="menu-btn" type="button" id="menuBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>

@@ -34,7 +34,7 @@ def page(slug, title_en, title_zh, desc_en, hero_html, hero_media, sections_html
     out += sections_html
     out += section("more", "More research", "更多研究", prev_next(slug), cls="alt")
     out += footer(root=R)
-    open(f'../projects/{slug}.html', 'w', encoding='utf-8').write(out)
+    open(f'/home/claude/site/projects/{slug}.html', 'w', encoding='utf-8').write(out)
     print("ok", slug)
 
 
@@ -228,19 +228,31 @@ def umi():
                   "每一个变换在被信任之前都要先测量，并把测量结果记录成账本，这样一旦相机或安装发生变化就可以重做。"),)
     body += stats([("40", "Quest–camera pose pairs in the hand–eye solution, none rejected", "组 Quest–相机位姿对用于手眼求解，无一剔除"),
                    ("1.67 / 3.09 / 1.91 mm", "fixed-board translation spread, axis-wise", "固定标定板平移离散度（逐轴）"),
+                   ("4.38 mm", "hold-out check: median error of 8 held-out board positions from a 32-pose fit", "留出检验：32 组拟合、8 组留出，标定板位置中位误差"),
                    ("−56.7 ms / +25 ms", "measured stream offsets: Quest to RGB, right tactile to RGB", "测得的流间偏移：Quest→RGB，右触觉→RGB"),
                    ("8.7–63.0 mm", "calibrated gripper range from a five-point lookup table", "五点查表标定的夹爪开度范围")])
+    body += h(3, "What is calibrated, and how it is reused", "标定了什么，以及如何复用")
+    body += prose(("Four things are calibrated: camera intrinsics, the Quest-to-camera hand–eye geometry, the robot-side camera and tool relations (FR3 eye-in-hand), and gripper width. The hand–eye solution follows the Park–Martin closed form over 40 poses; the notation is A_T_B for the transform that maps B coordinates into A, so the demonstration chain is W_T_C = W_T_Q · Q_T_C and the robot execution chain is B_T_F · F_T_C and F_T_TCP. The Quest/Unity axis conversion is treated as a basis change, not as part of the extrinsic.",
+                   "标定的内容有四项：相机内参、Quest 到相机的手眼几何、机器人侧的相机与工具关系（FR3 眼在手上）、以及夹爪开度。手眼求解采用 Park–Martin 闭式解，使用 40 组位姿；记号 A_T_B 表示把 B 坐标映射到 A 的变换，示教链路为 W_T_C = W_T_Q · Q_T_C，机器人执行链路为 B_T_F · F_T_C 与 F_T_TCP。Quest/Unity 的坐标轴转换被当作基变换处理，而不是外参的一部分。"),
+                  ("Reuse is explicit: whenever hardware changed between tasks we recalibrated, while the unchanged insertion set-up reused its calibration across both collection days (19 and 23 June), with serialised matrices agreeing to within 10⁻⁷. Gripper width goes through two lookup tables—a five-point UMI table from pixel separation of the finger markers to physical gap, then a Robotiq table from gap to driver position—so the same width means the same thing on the hand-held device and on the robot.",
+                   "复用是显式的：任务之间硬件一旦变化就重新标定；而插入任务的装置没有变化，两次采集日（6 月 19 日与 23 日）复用同一套标定，序列化矩阵的差异在 10⁻⁷ 以内。夹爪开度经过两张查找表——先用五点 UMI 表把手指标记的像素间距换算为物理开口，再用 Robotiq 表把开口换算为驱动器位置——这样同一个开度在手持设备和机器人上的含义完全一致。"))
     body += h(3, "Aligning two clocks with one motion", "用一次运动对齐两个时钟")
     body += two_col(
         prose(("With the camera and the Quest rigidly mounted on the UMI, the device moves in front of a stationary ArUco marker. The camera estimates the marker’s position from video and calibrated intrinsics; the Quest records the controller trajectory, transformed into the camera frame by the measured hand–eye transform. Following the one-axis alignment of exUMI, we compare normalised velocity along a matching axis and search for the scalar time offset that minimises the mean-squared error between the two signals.",
                "相机与 Quest 刚性固定在 UMI 上，设备在一个静止的 ArUco 标记前运动。相机根据视频和标定内参估计标记位置；Quest 记录手柄轨迹，并通过测得的手眼变换转换到相机坐标系。参照 exUMI 的单轴对齐方法，我们比较同一轴上的归一化速度，搜索使两路信号均方误差最小的标量时间偏移。"),
-              ("The accepted run estimated −56.738 ms: the main camera trails the Quest by about 56.7 ms, so Quest timestamps are shifted later to align the streams. This is a measured value for this set-up, not a universal hardware latency—and that distinction is exactly why the ledger exists.",
-               "被接受的那次运行估计出 −56.738 ms：主相机比 Quest 晚约 56.7 ms，因此把 Quest 时间戳后移以对齐数据流。这是针对本套装置的实测值，而非通用的硬件时延——这个区别正是账本存在的意义。")),
+              ("The accepted run estimated −56.738 ms: the main camera trails the Quest by about 56.7 ms, so Quest timestamps are shifted later to align the streams. The fit used 437 ArUco detections against 1,814 Quest samples with one-sample Gaussian smoothing, and the displayed mean-squared error fell from 0.523 to 0.476 after the shift. This is a measured value for this set-up, not a universal hardware latency—and that distinction is exactly why the ledger exists.",
+               "被接受的那次运行估计出 −56.738 ms：主相机比 Quest 晚约 56.7 ms，因此把 Quest 时间戳后移以对齐数据流。拟合使用了 437 次 ArUco 检测与 1,814 个 Quest 采样，做单样本高斯平滑，平移后显示的均方误差从 0.523 降到 0.476。这是针对本套装置的实测值，而非通用的硬件时延——这个区别正是账本存在的意义。")),
         figure(IMG + "umi-quest-latency.jpg", "Camera ArUco axis against the Quest axis after shifting by 56.7 ms: the two motion curves line up.",
                "相机 ArUco 轴与平移 56.7 ms 后的 Quest 轴：两条运动曲线对齐。"))
+    body += h(3, "Tactile cameras: a shared flicker instead of motion", "触觉相机：用共同的闪烁而不是运动")
+    body += prose(("The tactile cameras cannot see the ArUco marker, so their offset is measured differently: both the main camera and a tactile camera observe the same light flicker, and the cross-correlation of their brightness traces gives the offset independently of any Quest motion. The recorded offsets are 0 ms and +25 ms, assigned per session and sensor slot in the metadata.",
+                   "触觉相机看不到 ArUco 标记，所以它们的偏移用另一种方式测量：主相机和触觉相机同时观察同一个灯光闪烁，两条亮度曲线的互相关直接给出偏移，与 Quest 运动无关。记录到的偏移为 0 ms 与 +25 ms，按采集会话和传感器槽位写入元数据。"),)
     body += two_col(
-        figure(IMG + "umi-tactile-latency.jpg", "Cross-stream timing alignment for the tactile cameras relative to RGB.", "触觉相机相对 RGB 的跨流时序对齐。"),
+        figure(IMG + "umi-tactile-latency.jpg", "Brightness traces of the shared flicker and their cross-correlation: the tactile offset relative to RGB.", "共同闪烁的亮度曲线及其互相关：触觉相对 RGB 的偏移。"),
         figure(IMG + "umi-gripper-calibration.png", "Gripper-width lookup calibration from the ArUco marker on the finger.", "基于手指上 ArUco 标记的夹爪开度查表标定。"))
+    body += h(3, "Causal observation windows", "因果观测窗口")
+    body += prose(("Alignment is not only about matching timestamps; at run time a policy may only use what had actually arrived when it decided. We model each stream with its assumed latency—wrist RGB about 55 ms, Quest 10 ms, left tactile 35 ms, right tactile 90 ms—and for a decision at +80 ms with a ±60 ms matching tolerance the right tactile stream contributes its closest available frame (−45 ms), not the newest one. Mapped-time ordering and decision-time availability are checked separately, and an action-chunk index of 1 was chosen empirically as the lookahead in robot trials.",
+                   "对齐不只是时间戳匹配；运行时策略只能使用在做决策那一刻已经到达的数据。我们给每一路流一个假定时延——手腕 RGB 约 55 ms、Quest 10 ms、左触觉 35 ms、右触觉 90 ms——在 +80 ms 做决策、匹配容差 ±60 ms 的例子里，右触觉流贡献的是最近可用的那一帧（−45 ms），而不是最新到达的那一帧。时间映射后的顺序与决策时刻的可用性是两项独立检查；机器人试验中按经验选择动作块索引 1 作为前瞻。"),)
     body += video(VID + "umi-calibration.mp4", VID + "umi-calibration.jpg",
                   "Checking the calibration chain on the robot: the FR3 replays a trajectory written in the camera frame while an ArUco marker on the floor serves as the fixed reference. If the geometry and timing are right, the gripper follows the intended path.",
                   "在机器人上验证标定链路：FR3 回放一条在相机坐标系下写好的轨迹，地上的 ArUco 标记作为固定参考。只要几何与时序正确，夹爪就会沿预期路径运动。", wide=True)
@@ -252,18 +264,56 @@ def umi():
                    ("135,952", "policy frames", "个策略帧"),
                    ("77", "demonstrations in the strict subset used for the controlled comparison", "条示教组成受控对比用的严格子集"),
                    ("7-D", "camera-relative actions: translation, rotation, gripper width", "相机相对动作：平移、旋转、夹爪开度")])
+    body += h(3, "Acceptance criteria", "入库标准")
+    body += prose(("The audit applies the same rules to every episode. They are configurable code defaults (time step 0.1 s), not an external standard, and every exclusion is reason-coded so the decision can be revisited.",
+                   "审计对每一条示教应用同样的规则。这些规则是可配置的代码默认值（时间步 0.1 s），不是外部标准；每一次剔除都带原因编码，决定可以回溯。"),)
+    body += f'''<table><thead><tr><th>{t("Check", "检查项")}</th><th>{t("Rule / default", "规则 / 默认值")}</th><th>{t("Action", "处理")}</th></tr></thead><tbody>
+<tr><td>{t("Pose validity", "位姿有效性")}</td><td>{t("Finite position, axis-angle rotation and relative transforms", "位置、轴角旋转与相对变换均为有限值")}</td><td>{t("Flag invalid frames or steps", "标记无效帧/步")}</td></tr>
+<tr><td>{t("Gripper validity", "夹爪有效性")}</td><td>{t("Finite width, width ≥ −0.0001 m", "开度为有限值且 ≥ −0.0001 m")}</td><td>{t("Flag invalid frames", "标记无效帧")}</td></tr>
+<tr><td>{t("Required streams", "必需的数据流")}</td><td>{t("Configured RGB and tactile streams exist and cover the episode", "配置的 RGB 与触觉流存在且覆盖整条示教")}</td><td>{t("Flag missing streams", "标记缺失流")}</td></tr>
+<tr><td>{t("Tracking continuity", "追踪连续性")}</td><td>{t("≤ 50 mm translation and ≤ 20° rotation per step", "每步平移 ≤ 50 mm、旋转 ≤ 20°")}</td><td>{t("Reject jumps", "剔除跳变")}</td></tr>
+<tr><td>{t("Idle trimming", "静止裁剪")}</td><td>{t("< 1 mm and < 1° per step for ≥ 1 s; keep 0.5 s padding", "每步 < 1 mm 且 < 1° 持续 ≥ 1 s；保留 0.5 s 余量")}</td><td>{t("Trim idle ends", "裁掉两端静止段")}</td></tr>
+<tr><td>{t("Manual decisions", "人工判定")}</td><td>{t("Reason-coded keep / exclude per episode", "逐条示教的保留/剔除，附原因编码")}</td><td>{t("Record the decision", "记录决定")}</td></tr>
+<tr><td>{t("Training-window validity", "训练窗口有效性")}</td><td>{t("All observation and action-horizon frames pass", "观测与动作时域内的所有帧均通过")}</td><td>{t("Export masks and good segments", "导出掩码与有效片段")}</td></tr>
+<tr><td>{t("Sequential IK (optional)", "逐步逆运动学（可选）")}</td><td>{t("Converged; Cartesian residual ≤ 5 mm and ≤ 5°", "收敛；笛卡尔残差 ≤ 5 mm 且 ≤ 5°")}</td><td>{t("Flag infeasible steps", "标记不可达步")}</td></tr>
+<tr><td>{t("Joint limits and speed (optional)", "关节限位与速度（可选）")}</td><td>{t("URDF limits, margin ≥ 0.03 rad, speed/limit ratio ≤ 0.8", "URDF 限位，余量 ≥ 0.03 rad，速度/限值比 ≤ 0.8")}</td><td>{t("Flag violations", "标记越限")}</td></tr>
+</tbody></table>'''
+    body += prose(("The review side pairs these rules with tools: a synchronised timeline with sensor views and 3D replay for failure inspection; gripper recovery that re-detects the ArUco marker and writes a calibrated width back to H5 with a backup; contact diagnostics with left/right contact scores and tactile-window coverage; and curation outputs—reason logs, valid segments, filtered exports and a quarantine preview. Any step that changes data (gripper repair, ArUco masking, quarantine) snapshots its sources first.",
+                   "审查侧把这些规则和工具配在一起：带传感器视图与 3D 回放的同步时间线用于排查失败；夹爪恢复功能重新检测 ArUco 标记并把标定后的开度写回 H5（先备份）；接触诊断给出左右指接触分数与触觉窗口覆盖率；筛选输出包括原因日志、有效片段、过滤后的导出与隔离预览。任何会改动数据的步骤（夹爪修复、ArUco 遮挡、隔离）都先对源文件做快照。"),)
+    body += h(3, "What the timing checks found", "时序检查的结果")
+    body += prose(("A read-only pass over the 223 raw episodes found no duplicate or backward host timestamps; the export holds 222 episodes and 135,952 policy steps, and no tactile window reaches outside its episode. Because tactile cameras run slower than the policy step, six-frame tactile windows reuse source frames 15.9% of the time on the left finger and 38.2% on the right, and the latest frame in a window can be up to 90.2 ms (left) or 178.2 ms (right) old. These numbers describe the data as it is; the receive timestamps do not record preprocessing completion or policy decision deadlines, which is a stated limitation.",
+                   "对 223 条原始示教的只读检查没有发现重复或倒退的主机时间戳；导出结果包含 222 条示教、135,952 个策略步，没有任何触觉窗口越出所属示教。由于触觉相机帧率低于策略步长，六帧触觉窗口在左指有 15.9%、右指有 38.2% 的时间复用了源帧，窗口中最新一帧的映射年龄最大分别为 90.2 ms（左）和 178.2 ms（右）。这些数字描述的是数据本身的状态；接收时间戳并不记录预处理完成时刻或策略决策截止时刻，这是明确写出的局限。"),)
+    body += h(3, "Three representations of one episode", "同一条示教的三种表示")
+    body += prose(("Every episode exists in three linked forms: raw H5 with native timestamps, aligned H5 after offset correction and pose derivation, and the training Zarr. The Zarr stores absolute future camera targets (one step ahead); the policy loader turns them into relative SE(3) actions at load time, keeps gripper width absolute, and future targets are used only as supervision, never as inputs. The catalog of these representations—475 logical episodes including a DROID LeRobot export—can be browsed in RobotData Studio, an independent local-first data workspace that Suhang Xia built around this corpus.",
+                   "每条示教都以三种相互关联的形式存在：保留原生时间戳的原始 H5、偏移校正和位姿推导后的对齐 H5、以及训练用的 Zarr。Zarr 存的是绝对的未来相机目标（向前一步）；策略加载器在加载时把它们转换为相对的 SE(3) 动作，夹爪开度保持绝对值，未来目标只作监督、不作输入。这些表示的目录——475 条逻辑示教，含一份 DROID LeRobot 导出——可以在 RobotData Studio 中浏览，那是夏苏杭围绕这套数据构建的本地优先的独立数据工作台。"),)
+    body += f'''<table><thead><tr><th>{t("Stored field", "存储字段")}</th><th class="num">{t("Shape · type", "形状 · 类型")}</th></tr></thead><tbody>
+<tr><td>observation/quest_pose/right/pose</td><td class="num">[1573, 7] float64</td></tr>
+<tr><td>observation/wrist_rgb/right/video_mp4</td><td class="num">[3,043,112] uint8</td></tr>
+<tr><td>observation/tactile_image/right/left_finger/video_mp4</td><td class="num">[1,242,939] uint8</td></tr>
+<tr><td>observation/wrist_rgb/right/mapped_host_monotonic_ns</td><td class="num">[656] int64</td></tr>
+<tr><td>metadata/collection_config_yaml</td><td class="num">object</td></tr>
+</tbody></table>'''
     body += video(VID + "umi-collection.mp4", VID + "umi-collection.jpg", "Portable collection: the hand-held gripper, wrist camera and tactile fingertips in the task workspace, with the FR3 standing by (16× speed).",
                   "便携采集：手持夹爪、手腕相机与触觉指尖在任务工作区中，FR3 在一旁待命（16 倍速）。", wide=True)
-    body += video(VID + "umi-audit.mp4", VID + "umi-audit.jpg", "The audit viewer replaying an archived episode: trajectory in 3D, both tactile streams and the wrist view on one timeline.",
-                  "审计查看器回放一条归档示教：3D 轨迹、两路触觉流与手腕视角在同一条时间线上。", wide=True)
+    body += video(VID + "umi-audit.mp4", VID + "umi-audit.jpg", "The audit viewer replaying archived episode 000001 (18 s): trajectory in 3D, both tactile streams, camera-position plots and the gripper-width trace on one timeline. This archived audit ran relative-action checks with IK disabled—it shows synchronised records, not task success. Playback by Rerun; 3D view adapted from ManiSkill-ViTac.",
+                  "审计查看器回放归档示教 000001（18 s）：3D 轨迹、两路触觉流、相机位置曲线与夹爪开度曲线在同一条时间线上。这次归档审计只做了相对动作检查、未启用逆运动学——它展示的是同步后的记录，不是任务成功与否。回放基于 Rerun，3D 视图改编自 ManiSkill-ViTac。", wide=True)
     s += section("data", "Record first, align second, audit before training", "先记录，再对齐，训练前先审计", body, cls="alt")
 
     body = prose(("π0.5 is a vision-language-action model: a PaliGemma vision-language backbone with an action expert that generates action chunks by flow matching, pre-trained on large robot corpora and designed to be fine-tuned on a few hundred demonstrations. That makes it a natural match for a UMI corpus, which is exactly a few hundred demonstrations with a wrist view and a 7-D action.",
                   "π0.5 是一个视觉-语言-动作模型：PaliGemma 视觉语言骨干加上一个用流匹配生成动作块的动作专家，在大规模机器人数据上预训练，设计目标就是用几百条示教微调。这与 UMI 语料天然匹配——它正是几百条带手腕视角和 7 维动作的示教。"),
                  ("My branch: convert the clean Zarr corpus into LeRobot format (images, proprioceptive state, action chunks and a natural-language task prompt per episode), compute the normalisation statistics, fine-tune π0.5 with LoRA on a single GPU using the openpi stack, and serve the policy to the FR3 over a websocket inference server. At run time the policy receives the wrist image and robot state, predicts a 50-step chunk of camera-relative 7-D actions, and the controller converts them through inverse kinematics into joint commands. Rollouts were scored live with a success counter.",
                   "我的分支：把干净的 Zarr 语料转换成 LeRobot 格式（每条示教包含图像、本体状态、动作块和一条自然语言任务指令），计算归一化统计量，用 openpi 在单卡上以 LoRA 微调 π0.5，再通过 websocket 推理服务器把策略提供给 FR3。运行时策略接收手腕图像与机器人状态，预测 50 步相机相对的 7 维动作块，控制器经逆运动学转换为关节指令。实机回放用成功计数器实时记录。"),
-                 ("Running a VLA and a Diffusion Policy on one calibrated corpus is what makes the two branches comparable. On the Diffusion Policy side, vision-only scored 10/34 and the tactile-conditioned version 14/34 on the contact task; the π0.5 rollouts show that the same data pipeline produces trajectories a modern VLA can learn from and execute on the real FR3.",
-                  "在同一套标定过的语料上同时跑 VLA 和 Diffusion Policy，才让两条分支可以互相比较。Diffusion Policy 那边，纯视觉版本在接触任务上 10/34，触觉条件化版本 14/34；π0.5 的真机回放则表明同一条数据流水线产出的轨迹，现代 VLA 可以学会并在真实 FR3 上执行。"))
+                 ("On the robot, both branches share one execution chain: a TCP bridge maps camera-relative targets into FR3 and Robotiq commands, and Polymetis runs impedance control on the arm, so the FR3 carries the same Robotiq gripper and GelSight fingertips the hand-held device had.",
+                  "在机器人上两条分支共用同一条执行链路：一个 TCP 桥把相机相对目标映射为 FR3 与 Robotiq 指令，Polymetis 在机械臂上运行阻抗控制；FR3 装着与手持设备相同的 Robotiq 夹爪和 GelSight 指尖。"))
+    body += h(3, "The parallel branch: UniForce + Diffusion Policy", "并行分支：UniForce + Diffusion Policy")
+    body += prose(("The lab mate’s branch asks a narrower question on the same corpus: does a force-aware tactile representation help a Diffusion Policy? UniForce is trained in two stages—pre-trained on Taichi-simulated marker-field deformation under varied indenters and loading trajectories, then fine-tuned on paired, frame-aligned presses from the custom GelSight and the GelSight Mini (six indenters, 1,000 frames each)—and frozen before policy training. Six causal frames per fingertip become eight contact tokens that condition the policy alongside wrist RGB and state through a frozen DINO ViT-B with LoRA in its last four blocks; the policy predicts an eight-step chunk of camera-relative 7-D actions.",
+                   "同学的分支在同一套语料上问一个更窄的问题：力感知的触觉表示能否帮助 Diffusion Policy？UniForce 分两阶段训练——先在 Taichi 仿真的标记点形变（不同压头与加载轨迹）上预训练，再用自制 GelSight 与 GelSight Mini 上配对、帧对齐的真实按压（六种压头，各 1,000 帧）微调——训练策略前冻结。每个指尖六帧因果历史变成八个接触 token，与手腕 RGB 和状态一起（经最后四层带 LoRA 的冻结 DINO ViT-B）条件化策略；策略预测八步相机相对的 7 维动作块。"),
+                  ("In a controlled evaluation of 68 physical rollouts on the 77-demonstration strict subset (65 training, 12 validation; task: move a white cylinder to a white plate, success = contact), vision-only Diffusion Policy reached 10/34 (29.4%, Wilson 95% CI 16.8–46.2%) and UniForce + Diffusion Policy 14/34 (41.2%, CI 26.4–57.8%)—a +11.8-point difference that a two-sided Fisher exact test does not call significant (p = 0.447). The π0.5 branch is kept separate from that comparison; its contribution is showing that the same calibrated pipeline yields trajectories a modern VLA can learn from and execute on the real FR3.",
+                   "在 77 条示教的严格子集（65 训练、12 验证；任务：把白色圆柱移到白色盘子上，成功 = 接触）上做了 68 次真机回放的受控评估：纯视觉 Diffusion Policy 为 10/34（29.4%，Wilson 95% 置信区间 16.8–46.2%），UniForce + Diffusion Policy 为 14/34（41.2%，置信区间 26.4–57.8%）——相差 11.8 个百分点，双侧 Fisher 精确检验不显著（p = 0.447）。π0.5 分支不参与这一比较；它的意义在于证明同一条标定过的数据流水线产出的轨迹，现代 VLA 可以学会并在真实 FR3 上执行。"))
+    body += stats([("68", "physical rollouts in the controlled Diffusion Policy comparison", "次受控 Diffusion Policy 对比的真机回放"),
+                   ("10 / 34 → 14 / 34", "contacts: vision-only → UniForce-conditioned (p = 0.447)", "接触成功：纯视觉 → UniForce 条件化（p = 0.447）"),
+                   ("6 × 1,000", "indenters × frames for UniForce real-sensor fine-tuning", "压头 × 帧数：UniForce 真实传感器微调"),
+                   ("8 × 7-D", "action chunk predicted by the Diffusion Policy", "Diffusion Policy 预测的动作块")])
     body += contributions([
         ("Hand-held system", "手持系统", "Mounting the cameras and tactile sensors, Quest integration, gripper-width marker and lookup table.", "相机与触觉传感器安装、Quest 集成、夹爪开度标记与查表。"),
         ("Calibration", "标定", "Hand–eye calibration, ArUco trajectory checks on the FR3, latency measurement between streams.", "手眼标定、FR3 上的 ArUco 轨迹验证、各流之间的时延测量。"),
@@ -272,10 +322,13 @@ def umi():
     ])
     body += links([("https://arxiv.org/abs/2402.10329", "UMI paper (Chi et al., RSS 2024)", "UMI 论文（Chi 等，RSS 2024）"),
                    ("https://github.com/SuhangXia/tactile-umi", "Tactile UMI repository", "Tactile UMI 代码仓库"),
+                   ("https://suhangxia.github.io/research/tactile-umi/", "Tactile UMI project page (Suhang Xia)", "Tactile UMI 项目页（夏苏杭）"),
+                   ("https://suhangxia.github.io/demo/robotdata-studio/?dataset=tactile-umi", "Browse the dataset in RobotData Studio", "在 RobotData Studio 中浏览数据集"),
                    ("https://arxiv.org/abs/2602.01153", "UniForce on arXiv", "UniForce 论文（arXiv）"),
+                   ("https://arxiv.org/abs/2509.14688", "exUMI (latency-alignment method)", "exUMI（时延对齐方法）"),
                    ("https://www.physicalintelligence.company/blog/pi05", "π0.5 by Physical Intelligence", "π0.5（Physical Intelligence）")])
-    body += callout("The Tactile UMI system and corpus are joint work with Suhang Xia; the UniForce tactile representation was developed under the guidance of Zhuo Chen. The π0.5 fine-tuning and FR3 deployment described here are my branch.",
-                    "Tactile UMI 系统与数据集是与夏苏杭的共同工作；UniForce 触觉表示在陈卓指导下完成。本页描述的 π0.5 微调与 FR3 部署是我负责的分支。")
+    body += callout("The Tactile UMI system and corpus are joint work with Suhang Xia, who also built the Diffusion Policy branch, its controlled evaluation and the RobotData Studio workspace; the UniForce tactile representation was developed under the guidance of Zhuo Chen. The π0.5 fine-tuning and FR3 deployment described here are my branch.",
+                    "Tactile UMI 系统与数据集是与夏苏杭的共同工作，Diffusion Policy 分支、其受控评估以及 RobotData Studio 数据工作台也由他完成；UniForce 触觉表示在陈卓指导下完成。本页描述的 π0.5 微调与 FR3 部署是我负责的分支。")
     s += section("pi05", "Fine-tuning π0.5 on the corpus", "在语料上微调 π0.5", body)
 
     page("tactile-umi", pr['title'][0], pr['title'][1],
@@ -556,13 +609,13 @@ def monitoring():
 
 
 # =====================================================================
-# 7. HRI30 / Snap
+# 7. HRI30
 # =====================================================================
 def hri30():
     pr = PROJECTS[6]
     hero = project_hero(pr['kind'], *pr['title'], *pr['q'], [
         ("Role", "角色", "Built the two-stream system end to end: preprocessing, both models, training, batched inference and fusion", "端到端搭建双流系统：预处理、两个模型、训练、批量推理与融合"),
-        ("Period", "时间", "May – August 2026, London", "2026 年 5 月 – 8 月，伦敦"),
+        ("Period", "时间", "May – August 2026", "2026 年 5 月 – 8 月"),
         ("Dataset", "数据集", "HRI30: 30 industrial human–robot interaction actions, AVI clips with CSV labels", "HRI30：30 类工业人机交互动作，AVI 片段与 CSV 标签"),
         ("Stack", "技术栈", "PyTorch, torchvision r3d_18 (Kinetics-400), YOLOv8-Pose, custom ST-GCN, OpenCV, NumPy", "PyTorch、torchvision r3d_18（Kinetics-400）、YOLOv8-Pose、自实现 ST-GCN、OpenCV、NumPy"),
     ])
@@ -572,8 +625,8 @@ def hri30():
     s += section("why", "Why two streams", "为什么是双流", prose(
         ("Human action recognition is what lets a collaborative robot understand what a worker is doing and stay out of their way. In a factory the video is messy: cluttered backgrounds, motion blur, subtle hand movements that look alike. A single modality is fragile. RGB clips carry appearance and tool context but are easily distracted by the background; skeletons carry the structure of the motion and ignore the background, but are sparse and lose the tool. Fusing the two gives a classifier that can lean on whichever cue is reliable for a given action.",
          "人体动作识别让协作机器人理解工人在做什么、并避开他们。工厂里的视频很“脏”：背景杂乱、运动模糊、细微的手部动作彼此相似。单一模态很脆弱：RGB 片段携带外观与工具信息，却容易被背景干扰；骨架携带动作的结构并忽略背景，却稀疏且丢失了工具。把两者融合，分类器就能在不同动作上依赖更可靠的那一路线索。"),
-        ("HRI30 is an action-recognition dataset for industrial human–robot interaction with 30 action classes. I built the complete two-stream pipeline on it during my internship at Snap, from raw AVI files to a submission file.",
-         "HRI30 是一个面向工业人机交互的动作识别数据集，包含 30 类动作。我在 Snap 实习期间在它上面搭建了完整的双流流水线，从原始 AVI 文件到最终提交文件。")))
+        ("HRI30 is an action-recognition dataset for industrial human–robot interaction with 30 action classes. I built the complete two-stream pipeline on it, from raw AVI files to the final prediction file.",
+         "HRI30 是一个面向工业人机交互的动作识别数据集，包含 30 类动作。我在它上面搭建了完整的双流流水线，从原始 AVI 文件一直到最终的预测结果文件。")))
     body = diagram_fig("hri30", "The architecture: a 3D CNN on sampled RGB clips and an ST-GCN on YOLOv8-Pose skeletons, fused late by weighted probabilities.",
                        "架构：3D CNN 处理采样后的 RGB 片段，ST-GCN 处理 YOLOv8-Pose 骨架，加权概率后期融合。")
     body += steps([
@@ -606,8 +659,7 @@ def hri30():
         ("Training and inference", "训练与推理", "Symmetric training loops with checkpoint and label-map saving; batched inference; fusion and submission tooling; documented, reproducible project layout.", "对称的训练循环与检查点/标签映射保存；批量推理；融合与提交工具；有文档、可复现的项目结构。"),
     ])
     body += figure(IMG + "hri30-poster.jpg", "The project poster: motivation, the two branches, late fusion with α = 0.6, training curves and conclusions.", "项目海报：动机、两个分支、α = 0.6 的后期融合、训练曲线与结论。", wide=True)
-    body += links([(CV + "HRI30_Poster.pdf", "Poster (PDF)", "海报（PDF）"),
-                   ("https://doi.org/10.1109/ICRA46639.2022.9811871", "HRI30 dataset paper (ICRA 2022)", "HRI30 数据集论文（ICRA 2022）")])
+    body += links([("https://doi.org/10.1109/ICRA46639.2022.9811871", "HRI30 dataset paper (ICRA 2022)", "HRI30 数据集论文（ICRA 2022）")])
     s += section("results", "What the two streams taught me", "双流带来的结论", body)
     page("hri30", pr['title'][0], pr['title'][1],
          "A dual-stream action-recognition system on HRI30: a Kinetics-pretrained 3D ResNet-18 on RGB clips and an ST-GCN on YOLOv8-Pose skeletons with weighted late fusion.",

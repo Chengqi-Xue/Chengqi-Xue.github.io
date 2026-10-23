@@ -64,8 +64,8 @@ PROJECTS = [
          stack="Embedded vision · stepper/servo mechanisms · MCU · H₂S sensing · solar power · patent drafting",
          media=("assets/img/p6_patent_wellhead_fig1_overall_tripod_camera.png", None), media_type="img", contain=True,
          ),
-    dict(slug="hri30", group="internship",
-         kind=("Internship · Snap Inc. Spectacles AR · ML engineering (CV) · London, 2026", "实习 · Snap Inc. Spectacles AR · 机器学习工程（CV 方向）· 伦敦 · 2026"),
+    dict(slug="hri30", group="vision",
+         kind=("Research project · Computer vision · PyTorch", "研究项目 · 计算机视觉 · PyTorch"),
          title=("Dual-stream action recognition for industrial human–robot collaboration (HRI30)",
                 "面向工业人机协作的双流动作识别（HRI30）"),
          q=("Can RGB appearance and skeleton motion be fused so a robot reads what a worker is doing?",
@@ -80,5 +80,5 @@ PROJECTS = [
 GROUPS = [
     ("embodied", "Embodied intelligence and robot learning", "具身智能与机器人学习", "King’s College London, 2025–2026", "伦敦国王学院，2025–2026"),
     ("industrial", "Industrial vision and data-driven engineering", "工业视觉与数据驱动工程", "Yangtze University, 2021–2025", "长江大学，2021–2025"),
-    ("internship", "Internship", "实习经历", "Snap Inc., 2026", "Snap Inc.，2026"),
+    ("vision", "Human action recognition", "人体动作识别", "2026", "2026"),
 ]

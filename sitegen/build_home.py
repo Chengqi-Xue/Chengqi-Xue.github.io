@@ -61,6 +61,10 @@ PUBS = [
      "A review of image stitching algorithms based on internal thread",
      "面向内螺纹的图像拼接算法综述",
      "Z. Xu, <b>C. Xue</b> (corresponding author), X. Dou, et al.", "https://doi.org/10.1117/12.3065383", "thread-inspection"),
+    ("IEEE Access · under review", "2026",
+     "From weak cues to visual confirmation: cross-view hypothesis memory for active target search under occlusion",
+     "从弱线索到视觉确认：遮挡下主动目标搜索的跨视角假设记忆",
+     "Y. Zhou, <b>C. Xue</b>, M. Li, et al.", None, None),
     ("PLOS ONE · under review", "2026",
      "Modeling analysis of toughened sandwich glass based on machine learning methods",
      "基于机器学习方法的钢化夹层玻璃建模分析",
@@ -98,7 +102,7 @@ def about():
    "我有从算法到真机落地的完整经验：在 Franka 机械臂上以 π0.5 作为 VLA 骨干，结合 Qwen2.5-VL 和 GelSight 触觉感知，搭建了端到端的视觉-触觉-语言-动作系统，并完成真机演示。此前四年科研助理经历，让我习惯把工业现场的问题——无光的螺纹孔、只有 72 组数据的试验、危险的井场——变成发表的论文、授权的专利和能运行的系统。")}
 {p("How I work: break the problem apart first, then let data settle the argument. I can drive a project on my own and I like working across teams; English is a working language for me. What I want next is to put embodied-intelligence algorithms into real product settings.",
    "做事习惯先把问题拆清楚，再用数据验证结论；能独立推进项目，也愿意和不同团队协作；英语可以作为工作语言。接下来希望能在真实的产品场景里把具身智能算法落地。")}
-<div class="links"><a class="btn" href="mailto:{EMAIL}">{t("Email me", "给我发邮件")}</a><a class="btn ghost" href="assets/cv/Chengqi_Xue_CV_EN.pdf" target="_blank" rel="noopener">{t("CV (English)", "英文简历")}</a><a class="btn ghost" href="assets/cv/Chengqi_Xue_CV_ZH.pdf" target="_blank" rel="noopener">{t("CV (Chinese)", "中文简历")}</a></div>
+<div class="links"><a class="btn" href="mailto:{EMAIL}">{t("Email me", "给我发邮件")}</a><a class="btn ghost" href="assets/cv/Chengqi_Xue_CV_2026.pdf" target="_blank" rel="noopener">{t("Download CV (PDF)", "下载简历（PDF）")}</a></div>
 '''
     right = f'''
 <div class="about-logos"><img src="assets/img/kcl-logo.png" alt="King’s College London"></div>
@@ -187,7 +191,7 @@ def build():
                     "Four SCI Q1 journal papers, two SPIE conference papers, and four patents.",
                     "4 篇 SCI Q1 期刊论文、2 篇 SPIE 国际会议论文、4 项专利。", cls="alt")
     body += footer(root="")
-    open('../index.html', 'w', encoding='utf-8').write(body)
+    open('/home/claude/site/index.html', 'w', encoding='utf-8').write(body)
     print("home ok")
 
 

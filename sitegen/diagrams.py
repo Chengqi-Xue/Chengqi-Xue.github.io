@@ -259,5 +259,5 @@ DIAGRAMS = dict(vtla=vtla_architecture, umi=umi_pi05, hri30=hri30_arch, wellsite
 if __name__ == '__main__':
     # quick preview page
     body = ''.join(f'<h2>{k}</h2>{f()}' for k, f in DIAGRAMS.items())
-    open('../_diag_preview.html', 'w').write(f'<!doctype html><html data-lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="assets/css/style.css"><style>svg{{width:100%;max-width:1100px;display:block;margin:1rem auto}}</style></head><body>{body}</body></html>')
+    open('/home/claude/site/_diag_preview.html', 'w').write(f'<!doctype html><html data-lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="assets/css/style.css"><style>svg{{width:100%;max-width:1100px;display:block;margin:1rem auto}}</style></head><body>{body}</body></html>')
     print('ok')
