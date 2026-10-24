@@ -4,7 +4,7 @@ import html as _html
 
 SITE_NAME_EN = "Chengqi Xue"
 SITE_NAME_ZH = "薛程琪"
-EMAIL = "k25075983@kcl.ac.uk"
+EMAIL = "chengqi.xue@kcl.ac.uk"
 GITHUB = "https://github.com/Chengqi-Xue"
 
 
