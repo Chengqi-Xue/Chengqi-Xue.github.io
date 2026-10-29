@@ -83,8 +83,7 @@ def section(id_, title_en, title_zh, body, lead_en=None, lead_zh=None, cls="", c
     lead = p(lead_en, lead_zh, 'lead') if lead_en else ''
     if collapsed:
         return (f'<section class="sec{c}" id="{id_}"><div class="wrap"><details class="fold">'
-                f'<summary><div class="sec-head">{h(2, title_en, title_zh)}{lead}</div>'
-                f'<span class="fold-hint">{t("Click to expand", "点击展开")}</span></summary>'
+                f'<summary><div class="sec-head">{h(2, title_en, title_zh)}{lead}</div></summary>'
                 f'<div class="fold-body">{body}</div></details></div></section>')
     return (f'<section class="sec{c}" id="{id_}"><div class="wrap">'
             f'<div class="sec-head">{h(2, title_en, title_zh)}{lead}</div>{body}</div></section>')

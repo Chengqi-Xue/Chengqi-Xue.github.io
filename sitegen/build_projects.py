@@ -140,7 +140,7 @@ def vtla():
                "相邻等级任务的结果与逐单元上限。加入枚举对显著提升了任务表现，同时也抬高了上限；两个数字必须一起看。"),
         figure(IMG + "vtla-fig_probe.png", "Force-text probes: margins barely move across identity, deployment-ladder and ladder-plus-zero variants, and the largest perturbation sits below the smallest identity margin.",
                "力文本扰动探针：在原样、部署阶梯、阶梯加零三个变体之间置信差几乎不动，最大扰动量低于最小原始置信差。"))
-    s += section("protocol", "Testing on fabrics the model has never touched", "在模型从未摸过的织物上检验", body, collapsed=True)
+    s += section("protocol", "Testing on fabrics the model has never touched", "在模型从未摸过的织物上检验", body, cls="alt", collapsed=True)
 
     # Robot demo
     body = prose(("The deployment chain runs locally except for VLM scoring, which runs on a cloud H100 with the same evaluator and adapter as the benchmark, verified by hash. A press trajectory is taught once under zero stiffness by guiding the arm by hand, validated against four recorded-trajectory checks, then replayed with a hard stop that halts the arm within one 20 ms control cycle. Every captured GelSight frame receives a force estimate; a slot selector picks one pre-contact frame and three loading frames nearest the ladder targets, subject to six gates.",
@@ -255,7 +255,7 @@ def umi():
     body += video(VID + "umi-calibration.mp4", VID + "umi-calibration.jpg",
                   "Checking the calibration chain on the robot: the FR3 replays a trajectory written in the camera frame while an ArUco marker on the floor serves as the fixed reference. If the geometry and timing are right, the gripper follows the intended path.",
                   "在机器人上验证标定链路：FR3 回放一条在相机坐标系下写好的轨迹，地上的 ArUco 标记作为固定参考。只要几何与时序正确，夹爪就会沿预期路径运动。", wide=True)
-    s += section("calib", "Calibration ledger", "标定账本", body, collapsed=True)
+    s += section("calib", "Calibration ledger", "标定账本", body, cls="alt", collapsed=True)
 
     body = prose(("Raw streams keep their native timestamps in H5; alignment and camera-relative pose derivation are reproducible post-processing steps. A command-line audit checks stream completeness, timing faults and inverse-kinematics plausibility; a web audit lets us replay any episode with all streams side by side. Only accepted trajectories are promoted to the clean Zarr dataset that training consumes.",
                   "原始流在 H5 中保留各自的时间戳；对齐与相机相对位姿的推导是可重复的后处理步骤。命令行审计检查流完整性、时序故障与逆运动学可行性；网页审计则可以把任意一条示教的所有流并排回放。只有通过审计的轨迹才会被提升到训练所用的干净 Zarr 数据集。"),)
@@ -490,7 +490,7 @@ def thread():
                    ("https://doi.org/10.3390/s24175636", "Sensors: Defect generation and detection with GANs and YOLO", "Sensors：基于 GAN 与 YOLO 的缺陷生成与检测"),
                    ("https://doi.org/10.1117/12.3065383", "SPIE: Review of image stitching for internal threads", "SPIE：内螺纹图像拼接综述"),
                    ("https://doi.org/10.1117/12.3045519", "SPIE: Review of calibration and distortion correction", "SPIE：标定与畸变校正综述")])
-    s += section("outputs", "Papers, patents, and my part", "论文、专利与我的工作", body, collapsed=True)
+    s += section("outputs", "Papers, patents, and my part", "论文、专利与我的工作", body, cls="alt", collapsed=True)
     page("thread-inspection", pr['title'][0], pr['title'][1],
          "A six-fisheye imaging probe, cylindrical panorama stitching, GAN-based defect synthesis and YOLOv8 detection for internal threads; two SCI Q1 papers, two SPIE reviews and two patents.",
          hero, hero_media, s)

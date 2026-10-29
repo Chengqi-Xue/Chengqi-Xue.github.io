@@ -302,13 +302,10 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .phero-media .hero-side h3{color:#fff;margin-top:.4rem}
 .phero-media .hero-side p{color:rgba(245,247,246,.82)}
 /* collapsible sections */
-details.fold>summary{list-style:none;cursor:pointer;position:relative;padding-left:1.6rem}
-details.fold>summary::-webkit-details-marker{display:none}
-details.fold>summary::before{content:"";position:absolute;left:.15rem;top:.95em;width:.55rem;height:.55rem;border-right:2px solid var(--teal-2);border-bottom:2px solid var(--teal-2);transform:rotate(-45deg);transition:transform .2s}
-details.fold[open]>summary::before{transform:rotate(45deg)}
-details.fold>summary .sec-head{margin-bottom:0;display:inline-block}
-details.fold>summary h2{margin-bottom:.2em}
+details.fold>summary{list-style:none;cursor:pointer;display:block}
+details.fold>summary::-webkit-details-marker,details.fold>summary::marker{display:none;content:""}
+details.fold>summary .sec-head{margin-bottom:0}
+details.fold>summary h2{margin-bottom:0}
 details.fold>summary:hover h2{color:var(--teal-2)}
-.fold-hint{display:block;font-size:.9rem;color:var(--muted);margin-top:.2rem}
-details.fold[open]>summary .fold-hint{display:none}
-details.fold>.fold-body{padding-top:2rem}
+details.fold[open]>summary .sec-head{margin-bottom:2.2rem}
+.sec:has(>.wrap>details.fold:not([open])){padding-top:1.5rem;padding-bottom:1.5rem}
