@@ -6,6 +6,8 @@ SITE_NAME_EN = "Chengqi Xue"
 SITE_NAME_ZH = "薛程琪"
 EMAIL = "chengqi.xue@kcl.ac.uk"
 GITHUB = "https://github.com/Chengqi-Xue"
+import hashlib as _hl, os as _os
+CSS_VER = _hl.md5(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "site", "assets", "css", "style.css") if _os.path.exists(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "site", "assets", "css", "style.css")) else _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "assets", "css", "style.css"), "rb").read()).hexdigest()[:8]
 
 
 def t(en, zh):
@@ -103,7 +105,7 @@ def head(title_en, title_zh, desc_en, root="", page_class=""):
 <link rel="icon" href="{root}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="{root}assets/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{root}assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{root}assets/css/style.css">
+<link rel="stylesheet" href="{root}assets/css/style.css?v={CSS_VER}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" media="print" onload="this.media='all'">
