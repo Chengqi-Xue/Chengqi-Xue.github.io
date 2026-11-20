@@ -8,6 +8,16 @@ EMAIL = "chengqi.xue@kcl.ac.uk"
 GITHUB = "https://github.com/Chengqi-Xue"
 import hashlib as _hl, os as _os
 CSS_VER = _hl.md5(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "site", "assets", "css", "style.css") if _os.path.exists(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "site", "assets", "css", "style.css")) else _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "assets", "css", "style.css"), "rb").read()).hexdigest()[:8]
+def _asset_ver(rel):
+    """Short content hash of a built asset, used as ?v= so browsers fetch the new file after each change."""
+    here = _os.path.dirname(_os.path.abspath(__file__))
+    for base in (_os.path.join(here, "..", "site"), _os.path.join(here, "..")):
+        f = _os.path.join(base, rel)
+        if _os.path.exists(f):
+            return _hl.md5(open(f, "rb").read()).hexdigest()[:8]
+    return "0"
+CV_PDF = "assets/cv/Chengqi_Xue_CV_2026.pdf"
+CV_VER = _asset_ver(CV_PDF)
 
 
 def t(en, zh):
@@ -127,7 +137,7 @@ def header(root="", active=""):
 {nav("index.html#research", "Research", "研究项目", "research")}
 {nav("index.html#publications", "Publications", "论文与专利", "publications")}
 {nav("index.html#about", "About", "关于我", "about")}
-<a href="{root}assets/cv/Chengqi_Xue_CV_2026.pdf" target="_blank" rel="noopener">{t("CV", "简历")}</a>
+<a href="{root}{CV_PDF}?v={CV_VER}" target="_blank" rel="noopener">{t("CV", "简历")}</a>
 <button class="lang" type="button" id="langToggle" aria-label="Switch language"><span class="en">中文</span><span class="zh">English</span></button>
 </nav>
 <button class="menu-btn" type="button" id="menuBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
