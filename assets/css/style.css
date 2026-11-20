@@ -309,3 +309,6 @@ details.fold>summary h2{margin-bottom:0}
 details.fold>summary:hover h2{color:var(--teal-2)}
 details.fold[open]>summary .sec-head{margin-bottom:2.2rem}
 .sec:has(>.wrap>details.fold:not([open])){padding-top:1.5rem;padding-bottom:1.5rem}
+.patent .pat-links{margin-top:.35rem}
+.patent .pat-links a{color:var(--teal-2);font-weight:500;text-decoration:none}
+.patent .pat-links a:hover{text-decoration:underline}

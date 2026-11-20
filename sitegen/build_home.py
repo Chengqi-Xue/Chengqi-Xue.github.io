@@ -72,10 +72,15 @@ PUBS = [
 ]
 
 PATENTS = [
-    ("First inventor", "第一发明人", "Wellhead working-face monitoring device based on machine vision", "基于机器视觉的井口工作面监控装置", "ZL 202323487863.X · granted 2024", "industrial-monitoring"),
-    ("First inventor", "第一发明人", "Well-site wind-direction early-warning system", "风向预警系统", "ZL 2023 2 3530543.8 · granted 2024", "industrial-monitoring"),
-    ("Third inventor", "第三发明人", "External-thread inspection device for tubular tools", "管具外螺纹检测装置", "CN 202411050637.1 · 2024", "thread-inspection"),
-    ("Third inventor", "第三发明人", "Internal thread defect detection system", "内螺纹缺陷检测系统", "CN 202411066290.X · 2024", "thread-inspection"),
+    # (role EN, role ZH, title EN, title ZH, number, status EN, status ZH, project slug, certificate PDF or None)
+    ("First inventor", "第一发明人", "Wellhead working-face monitoring device based on machine vision", "基于机器视觉的井口工作面监控装置",
+     "ZL 2023 2 3487863.X · CN 221768175 U", "Utility model · granted 24 Sep 2024", "实用新型 · 2024 年 9 月 24 日授权", "industrial-monitoring", "CN221768175U.pdf"),
+    ("First inventor", "第一发明人", "Well-site wind-direction early-warning device", "井场风向预警装置",
+     "ZL 2023 2 3530543.8 · CN 221927274 U", "Utility model · granted 29 Oct 2024", "实用新型 · 2024 年 10 月 29 日授权", "industrial-monitoring", "CN221927274U.pdf"),
+    ("Third inventor", "第三发明人", "External-thread inspection device for tubular tools", "管具外螺纹检测装置",
+     "CN 202411050637.1", "Invention patent · under substantive examination", "发明专利 · 实质审查中", "thread-inspection", None),
+    ("Third inventor", "第三发明人", "Internal thread defect detection system", "内螺纹缺陷检测系统",
+     "ZL 2024 1 1066290.X · CN 118691600 B", "Invention patent · granted 17 Nov 2026", "发明专利 · 2026 年 11 月 17 日授权", "thread-inspection", "CN118691600B.pdf"),
 ]
 
 
@@ -88,8 +93,12 @@ def publications():
     out.append('</ul>')
     out.append(h(3, "Patents", "专利"))
     out.append('<div class="patents">')
-    for re_, rz, te, tz, no, slug in PATENTS:
-        out.append(f'<div class="patent"><span class="role">{t(re_, rz)}</span><div>{t(te, tz)}</div><div class="no">{no}</div><div class="no"><a href="projects/{slug}.html">{t("Project page", "项目页面")}</a></div></div>')
+    for re_, rz, te, tz, no, se, sz, slug, cert in PATENTS:
+        lk = f'<a href="projects/{slug}.html">{t("Project page", "项目页面")}</a>'
+        if cert:
+            lk += f' · <a href="assets/patents/{cert}" target="_blank" rel="noopener">{t("Certificate (PDF)", "专利证书（PDF）")}</a>'
+        no = ' · '.join(part.replace(' ', '&nbsp;') for part in no.split(' · '))
+        out.append(f'<div class="patent"><span class="role">{t(re_, rz)}</span><div>{t(te, tz)}</div><div class="no">{no}</div><div class="no">{t(se, sz)}</div><div class="no pat-links">{lk}</div></div>')
     out.append('</div>')
     return ''.join(out)
 

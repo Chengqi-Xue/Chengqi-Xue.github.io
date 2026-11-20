@@ -7,6 +7,7 @@ R = "../"
 IMG = R + "assets/img/"
 VID = R + "assets/video/"
 CV = R + "assets/cv/"
+PAT = R + "assets/patents/"
 
 
 def diagram_fig(key, cap_en, cap_zh):
@@ -475,21 +476,22 @@ def thread():
     ])
     s += section("detect", "Detecting defects—and manufacturing the data to learn from", "检测缺陷，并“制造”学习所需的数据", body, cls="alt")
 
-    body = prose(("Two reviews I corresponded grew directly out of the engineering: one on image stitching for internal threads, one on calibration and distortion correction. And two patent applications extend the hardware: an internal-thread system that detects defects with adaptive binarisation and a Radon transform rather than a learned model, and an external-thread device that places four stereo camera pairs at 90° around a vertical pipe on a lifting platform and stitches their point clouds.",
-                  "我作为通讯作者的两篇综述直接来自工程实践：一篇关于内螺纹图像拼接，一篇关于标定与畸变校正。两项专利申请则扩展了硬件：一套用自适应二值化和 Radon 变换（而非学习模型）检测缺陷的内螺纹系统，以及一套在升降平台上围绕竖直管件 90° 布置四对双目相机并拼接点云的外螺纹检测装置。"),)
+    body = prose(("Two reviews I corresponded grew directly out of the engineering: one on image stitching for internal threads, one on calibration and distortion correction. And two invention patents extend the hardware: an internal-thread system that detects defects with adaptive binarisation and a Radon transform rather than a learned model (granted in November 2026), and an external-thread device that places four stereo camera pairs at 90° around a vertical pipe on a lifting platform and stitches their point clouds (under substantive examination).",
+                  "我作为通讯作者的两篇综述直接来自工程实践：一篇关于内螺纹图像拼接，一篇关于标定与畸变校正。两项发明专利则扩展了硬件：一套用自适应二值化和 Radon 变换（而非学习模型）检测缺陷的内螺纹系统（2026 年 11 月授权），以及一套在升降平台上围绕竖直管件 90° 布置四对双目相机并拼接点云的外螺纹检测装置（实质审查中）。"),)
     body += two_col(
-        figure(IMG + "p4_patent_external_thread_fig1_top_view.png", "External-thread inspection device (CN 202411050637.1): four stereo pairs and LED sources around the pipe, feeding a computer through a hub.", "外螺纹检测装置（CN 202411050637.1）：管件周围的四对双目相机与 LED 光源，经集线器连接计算机。"),
-        figure(IMG + "p4_patent_radon_fig3to5_edge_radon_result.png", "Internal-thread system (CN 202411066290.X): original image, binarised edges and the Radon-transform map used to flag defects.", "内螺纹检测系统（CN 202411066290.X）：原图、二值化边缘与用于标记缺陷的 Radon 变换图。"))
+        figure(IMG + "p4_patent_external_thread_fig1_top_view.png", "External-thread inspection device (application CN 202411050637.1, under examination): four stereo pairs and LED sources around the pipe, feeding a computer through a hub.", "外螺纹检测装置（申请号 CN 202411050637.1，实质审查中）：管件周围的四对双目相机与 LED 光源，经集线器连接计算机。"),
+        figure(IMG + "p4_patent_radon_fig3to5_edge_radon_result.png", "Internal-thread system (ZL 2024 1 1066290.X, granted as CN 118691600 B): original image, binarised edges and the Radon-transform map used to flag defects.", "内螺纹检测系统（ZL 2024 1 1066290.X，授权公告号 CN 118691600 B）：原图、二值化边缘与用于标记缺陷的 Radon 变换图。"))
     body += contributions([
         ("Imaging hardware", "成像硬件", "Camera ring geometry, strip lighting and diffuser, Raspberry Pi control of cameras, lighting and the stepper carrier.", "相机环几何、条形光源与柔光罩，树莓派对相机、光源与步进载体的控制。"),
         ("Classical vision", "传统视觉", "Fisheye calibration and undistortion, denoising and Retinex benchmarks, cylindrical-model stitching.", "鱼眼标定与畸变校正、去噪与 Retinex 对比、柱面模型拼接。"),
         ("Learning", "学习方法", "Dataset annotation; SSD / YOLOv5 / YOLOv8 comparison; DFMGAN training and the external-thread validation design.", "数据集标注；SSD / YOLOv5 / YOLOv8 对比；DFMGAN 训练与外螺纹验证方案。"),
-        ("Writing and IP", "写作与知识产权", "PLOS ONE and Sensors papers, corresponding author on two SPIE reviews, two patent applications.", "PLOS ONE 与 Sensors 论文、两篇 SPIE 综述通讯作者、两项专利申请。"),
+        ("Writing and IP", "写作与知识产权", "PLOS ONE and Sensors papers, corresponding author on two SPIE reviews, two invention patents (one granted, one under examination).", "PLOS ONE 与 Sensors 论文、两篇 SPIE 综述通讯作者、两项发明专利（一项已授权，一项实质审查中）。"),
     ])
     body += links([("https://doi.org/10.1371/journal.pone.0304224", "PLOS ONE: Internal thread defect detection system based on multi-vision", "PLOS ONE：基于多视觉的内螺纹缺陷检测系统"),
                    ("https://doi.org/10.3390/s24175636", "Sensors: Defect generation and detection with GANs and YOLO", "Sensors：基于 GAN 与 YOLO 的缺陷生成与检测"),
                    ("https://doi.org/10.1117/12.3065383", "SPIE: Review of image stitching for internal threads", "SPIE：内螺纹图像拼接综述"),
-                   ("https://doi.org/10.1117/12.3045519", "SPIE: Review of calibration and distortion correction", "SPIE：标定与畸变校正综述")])
+                   ("https://doi.org/10.1117/12.3045519", "SPIE: Review of calibration and distortion correction", "SPIE：标定与畸变校正综述"),
+                   (PAT + "CN118691600B.pdf", "Patent certificate: internal thread defect detection system (CN 118691600 B)", "专利证书：内螺纹缺陷检测系统（CN 118691600 B）")])
     s += section("outputs", "Papers, patents, and my part", "论文、专利与我的工作", body, cls="alt", collapsed=True)
     page("thread-inspection", pr['title'][0], pr['title'][1],
          "A six-fisheye imaging probe, cylindrical panorama stitching, GAN-based defect synthesis and YOLOv8 detection for internal threads; two SCI Q1 papers, two SPIE reviews and two patents.",
@@ -568,7 +570,7 @@ def monitoring():
         ("Role", "角色", "First inventor on both patents; mechanical concept, sensing chain and embedded vision design", "两项专利第一发明人；机械方案、传感链路与嵌入式视觉设计"),
         ("Period", "时间", "June 2023 – February 2024", "2023 年 6 月 – 2024 年 2 月"),
         ("Where", "单位", "Yangtze University, for oil and gas exploration sites in Hubei", "长江大学，面向湖北油气勘探井场"),
-        ("Patents", "专利", "ZL 202323487863.X (granted 2024-09) and ZL 2023 2 3530543.8 (granted 2024-10)", "ZL 202323487863.X（2024 年 9 月授权）与 ZL 2023 2 3530543.8（2024 年 10 月授权）"),
+        ("Patents", "专利", "ZL 2023 2 3487863.X (granted 2024-09) and ZL 2023 2 3530543.8 (granted 2024-10)", "ZL 2023 2 3487863.X（2024 年 9 月授权）与 ZL 2023 2 3530543.8（2024 年 10 月授权）"),
     ])
     hero_media = None
     s = ''
@@ -603,6 +605,8 @@ def monitoring():
     ])
     body += gallery([(IMG + "p6_patent_wellhead_page1.jpg", "CN 221768175 U — wellhead working-face monitoring device based on machine vision.", "CN 221768175 U —— 基于机器视觉的井口工作面监控装置。"),
                      (IMG + "p6_patent_wind_warning_page1.png", "CN 221927274 U — well-site wind-direction early-warning device.", "CN 221927274 U —— 井场风向预警装置。")], cols=2)
+    body += links([(PAT + "CN221768175U.pdf", "Patent certificate: wellhead monitoring device (CN 221768175 U)", "专利证书：井口工作面监控装置（CN 221768175 U）"),
+                   (PAT + "CN221927274U.pdf", "Patent certificate: wind-direction warning device (CN 221927274 U)", "专利证书：井场风向预警装置（CN 221927274 U）")])
     s += section("beacon", "Device 2: an arrow that always points to safety", "装置二：永远指向安全的箭头", body)
     page("industrial-monitoring", pr['title'][0], pr['title'][1],
          "Two granted utility patents (first inventor): a three-axis machine-vision gantry that flags missing hard hats and smoking at wellheads, and a solar-powered H₂S beacon whose LED arrow follows the wind to show the escape route.",
